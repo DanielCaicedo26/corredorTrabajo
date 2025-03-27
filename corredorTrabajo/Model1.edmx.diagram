@@ -5,10 +5,29 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="e47584ef66fd4c2e815b1640a54c830e" Name="Diagram1" >
-        <EntityTypeShape EntityType="Model1.User" Width="1.5" PointX="8" PointY="2.5" />
-        <EntityTypeShape EntityType="Model1.RolUser" Width="1.5" PointX="4.5" PointY="2.5" />
-        <EntityTypeShape EntityType="Model1.Rol" Width="1.5" PointX="6.25" PointY="2.5" />
-        <EntityTypeShape EntityType="Model1.AccessLog" Width="1.5" PointX="10.5" PointY="2.75" />
+        <EntityTypeShape EntityType="Model1.User" Width="1.5" PointX="8.5" PointY="0.625" />
+        <EntityTypeShape EntityType="Model1.RolUser" Width="1.5" PointX="6.125" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model1.Rol" Width="1.5" PointX="3.5" PointY="0.875" />
+        <EntityTypeShape EntityType="Model1.AccessLog" Width="1.5" PointX="10.75" PointY="1.25" />
+        <AssociationConnector Association="Model1.UserAccessLog" />
+        <AssociationConnector Association="Model1.RolUserUser" />
+        <AssociationConnector Association="Model1.RolUserRol" />
+        <EntityTypeShape EntityType="Model1.RolFormPermissionId" Width="1.5" PointX="3.5" PointY="3.5" />
+        <AssociationConnector Association="Model1.RolRolFormPermissionId" />
+        <EntityTypeShape EntityType="Model1.Form" Width="1.5" PointX="5.875" PointY="3.625" />
+        <AssociationConnector Association="Model1.RolFormPermissionIdForm" />
+        <EntityTypeShape EntityType="Model1.UserNotification" Width="1.5" PointX="8.375" PointY="4.125" />
+        <AssociationConnector Association="Model1.UserUserNotification" />
+        <EntityTypeShape EntityType="Model1.Person" Width="1.5" PointX="11.375" PointY="4.125" />
+        <AssociationConnector Association="Model1.UserPerson" />
+        <EntityTypeShape EntityType="Model1.UserViolantion" Width="1.5" PointX="13.875" PointY="1.375" />
+        <AssociationConnector Association="Model1.PersonUserViolantion" />
+        <EntityTypeShape EntityType="Model1.PaymentHistory" Width="1.5" PointX="16.75" PointY="1.75" />
+        <EntityTypeShape EntityType="Model1.Payment" Width="1.5" PointX="18.125" PointY="4.375" />
+        <AssociationConnector Association="Model1.UserViolantionPaymentHistory1" />
+        <AssociationConnector Association="Model1.PaymentUserViolantion" />
+        <EntityTypeShape EntityType="Model1.TypePayment" Width="1.5" PointX="18.25" PointY="7.25" />
+        <AssociationConnector Association="Model1.PaymentTypePayment" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

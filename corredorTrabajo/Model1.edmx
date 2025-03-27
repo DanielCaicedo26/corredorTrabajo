@@ -17,6 +17,58 @@
           <EntitySet Name="RolUserSet" EntityType="Model1.RolUser" />
           <EntitySet Name="Rol" EntityType="Model1.Rol" />
           <EntitySet Name="AccessLog" EntityType="Model1.AccessLog" />
+          <AssociationSet Name="UserAccessLog" Association="Model1.UserAccessLog">
+            <End Role="User" EntitySet="UserSet" />
+            <End Role="AccessLog" EntitySet="AccessLog" />
+          </AssociationSet>
+          <AssociationSet Name="RolUserUser" Association="Model1.RolUserUser">
+            <End Role="RolUser" EntitySet="RolUserSet" />
+            <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
+          <AssociationSet Name="RolUserRol" Association="Model1.RolUserRol">
+            <End Role="RolUser" EntitySet="RolUserSet" />
+            <End Role="Rol" EntitySet="Rol" />
+          </AssociationSet>
+          <EntitySet Name="RolFormPermissionIdSet" EntityType="Model1.RolFormPermissionId" />
+          <AssociationSet Name="RolRolFormPermissionId" Association="Model1.RolRolFormPermissionId">
+            <End Role="Rol" EntitySet="Rol" />
+            <End Role="RolFormPermissionId" EntitySet="RolFormPermissionIdSet" />
+          </AssociationSet>
+          <EntitySet Name="FormSet" EntityType="Model1.Form" />
+          <AssociationSet Name="RolFormPermissionIdForm" Association="Model1.RolFormPermissionIdForm">
+            <End Role="RolFormPermissionId" EntitySet="RolFormPermissionIdSet" />
+            <End Role="Form" EntitySet="FormSet" />
+          </AssociationSet>
+          <EntitySet Name="UserNotificationSet" EntityType="Model1.UserNotification" />
+          <AssociationSet Name="UserUserNotification" Association="Model1.UserUserNotification">
+            <End Role="User" EntitySet="UserSet" />
+            <End Role="UserNotification" EntitySet="UserNotificationSet" />
+          </AssociationSet>
+          <EntitySet Name="PersonSet" EntityType="Model1.Person" />
+          <AssociationSet Name="UserPerson" Association="Model1.UserPerson">
+            <End Role="User" EntitySet="UserSet" />
+            <End Role="Person" EntitySet="PersonSet" />
+          </AssociationSet>
+          <EntitySet Name="UserViolantionSet" EntityType="Model1.UserViolantion" />
+          <AssociationSet Name="PersonUserViolantion" Association="Model1.PersonUserViolantion">
+            <End Role="Person" EntitySet="PersonSet" />
+            <End Role="UserViolantion" EntitySet="UserViolantionSet" />
+          </AssociationSet>
+          <EntitySet Name="PaymentHistorySet" EntityType="Model1.PaymentHistory" />
+          <EntitySet Name="PaymentSet" EntityType="Model1.Payment" />
+          <AssociationSet Name="UserViolantionPaymentHistory1" Association="Model1.UserViolantionPaymentHistory1">
+            <End Role="UserViolantion" EntitySet="UserViolantionSet" />
+            <End Role="PaymentHistory" EntitySet="PaymentHistorySet" />
+          </AssociationSet>
+          <AssociationSet Name="PaymentUserViolantion" Association="Model1.PaymentUserViolantion">
+            <End Role="UserViolantion" EntitySet="UserViolantionSet" />
+            <End Role="Payment" EntitySet="PaymentSet" />
+          </AssociationSet>
+          <EntitySet Name="TypePaymentSet" EntityType="Model1.TypePayment" />
+          <AssociationSet Name="PaymentTypePayment" Association="Model1.PaymentTypePayment">
+            <End Role="Payment" EntitySet="PaymentSet" />
+            <End Role="TypePayment" EntitySet="TypePaymentSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Key>
@@ -28,6 +80,11 @@
           <Property Name="gmail" Type="String" Nullable="false" />
           <Property Name="registrationdate" Type="String" Nullable="false" />
           <Property Name="usernotificationid" Type="String" Nullable="false" />
+          <NavigationProperty Name="AccessLog" Relationship="Model1.UserAccessLog" FromRole="User" ToRole="AccessLog" />
+          <NavigationProperty Name="RolUser" Relationship="Model1.RolUserUser" FromRole="User" ToRole="RolUser" />
+          <NavigationProperty Name="UserNotification" Relationship="Model1.UserUserNotification" FromRole="User" ToRole="UserNotification" />
+          <Property Name="UserNotificationId1" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="Model1.UserPerson" FromRole="User" ToRole="Person" />
         </EntityType>
         <EntityType Name="RolUser">
           <Key>
@@ -37,6 +94,8 @@
           <Property Name="rolid" Type="String" Nullable="false" />
           <Property Name="userid" Type="String" Nullable="false" />
           <Property Name="UserId1" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Model1.RolUserUser" FromRole="RolUser" ToRole="User" />
+          <NavigationProperty Name="Rol" Relationship="Model1.RolUserRol" FromRole="RolUser" ToRole="Rol" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -45,6 +104,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="role" Type="String" Nullable="false" />
           <Property Name="description" Type="String" Nullable="false" />
+          <NavigationProperty Name="RolUser" Relationship="Model1.RolUserRol" FromRole="Rol" ToRole="RolUser" />
+          <NavigationProperty Name="RolFormPermissionId" Relationship="Model1.RolRolFormPermissionId" FromRole="Rol" ToRole="RolFormPermissionId" />
         </EntityType>
         <EntityType Name="AccessLog">
           <Key>
@@ -55,7 +116,147 @@
           <Property Name="timestamp" Type="String" Nullable="false" />
           <Property Name="status" Type="String" Nullable="false" />
           <Property Name="details" Type="String" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Model1.UserAccessLog" FromRole="AccessLog" ToRole="User" />
+          <Property Name="RolId" Type="Int32" Nullable="false" />
         </EntityType>
+        <Association Name="UserAccessLog">
+          <End Type="Model1.User" Role="User" Multiplicity="1" />
+          <End Type="Model1.AccessLog" Role="AccessLog" Multiplicity="*" />
+        </Association>
+        <Association Name="RolUserUser">
+          <End Type="Model1.RolUser" Role="RolUser" Multiplicity="*" />
+          <End Type="Model1.User" Role="User" Multiplicity="1" />
+        </Association>
+        <Association Name="RolUserRol">
+          <End Type="Model1.RolUser" Role="RolUser" Multiplicity="*" />
+          <End Type="Model1.Rol" Role="Rol" Multiplicity="1" />
+        </Association>
+        <EntityType Name="RolFormPermissionId">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rolid" Type="String" Nullable="false" />
+          <Property Name="formid" Type="String" Nullable="false" />
+          <Property Name="permissionid" Type="String" Nullable="false" />
+          <NavigationProperty Name="Rol" Relationship="Model1.RolRolFormPermissionId" FromRole="RolFormPermissionId" ToRole="Rol" />
+          <NavigationProperty Name="Form" Relationship="Model1.RolFormPermissionIdForm" FromRole="RolFormPermissionId" ToRole="Form" />
+        </EntityType>
+        <Association Name="RolRolFormPermissionId">
+          <End Type="Model1.Rol" Role="Rol" Multiplicity="1" />
+          <End Type="Model1.RolFormPermissionId" Role="RolFormPermissionId" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Form">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" />
+          <Property Name="description" Type="String" Nullable="false" />
+          <Property Name="datecreation" Type="String" Nullable="false" />
+          <Property Name="status" Type="String" Nullable="false" />
+          <NavigationProperty Name="RolFormPermissionId" Relationship="Model1.RolFormPermissionIdForm" FromRole="Form" ToRole="RolFormPermissionId" />
+        </EntityType>
+        <Association Name="RolFormPermissionIdForm">
+          <End Type="Model1.RolFormPermissionId" Role="RolFormPermissionId" Multiplicity="*" />
+          <End Type="Model1.Form" Role="Form" Multiplicity="1" />
+        </Association>
+        <EntityType Name="UserNotification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="message" Type="String" Nullable="false" />
+          <Property Name="shippingdate" Type="String" Nullable="false" />
+          <Property Name="state" Type="String" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Model1.UserUserNotification" FromRole="UserNotification" ToRole="User" />
+        </EntityType>
+        <Association Name="UserUserNotification">
+          <End Type="Model1.User" Role="User" Multiplicity="*" />
+          <End Type="Model1.UserNotification" Role="UserNotification" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="UserNotification">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="UserNotificationId1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" />
+          <Property Name="lastname" Type="String" Nullable="false" />
+          <Property Name="phone" Type="String" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Model1.UserPerson" FromRole="Person" ToRole="User" />
+          <NavigationProperty Name="UserViolantion" Relationship="Model1.PersonUserViolantion" FromRole="Person" ToRole="UserViolantion" />
+        </EntityType>
+        <Association Name="UserPerson">
+          <End Type="Model1.User" Role="User" Multiplicity="1" />
+          <End Type="Model1.Person" Role="Person" Multiplicity="1" />
+        </Association>
+        <EntityType Name="UserViolantion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dateviolation" Type="String" Nullable="false" />
+          <Property Name="finevalue" Type="String" Nullable="false" />
+          <Property Name="state" Type="String" Nullable="false" />
+          <Property Name="paymentid" Type="String" Nullable="false" />
+          <Property Name="personaid" Type="String" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="Model1.PersonUserViolantion" FromRole="UserViolantion" ToRole="Person" />
+          <NavigationProperty Name="PaymentHistory1" Relationship="Model1.UserViolantionPaymentHistory1" FromRole="UserViolantion" ToRole="PaymentHistory" />
+          <NavigationProperty Name="Payment" Relationship="Model1.PaymentUserViolantion" FromRole="UserViolantion" ToRole="Payment" />
+        </EntityType>
+        <Association Name="PersonUserViolantion">
+          <End Type="Model1.Person" Role="Person" Multiplicity="1" />
+          <End Type="Model1.UserViolantion" Role="UserViolantion" Multiplicity="*" />
+        </Association>
+        <EntityType Name="PaymentHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="paymentdate" Type="String" Nullable="false" />
+          <Property Name="discountdate" Type="String" Nullable="false" />
+          <NavigationProperty Name="UserViolantion1" Relationship="Model1.UserViolantionPaymentHistory1" FromRole="PaymentHistory" ToRole="UserViolantion" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="typepaymet" Type="String" Nullable="false" />
+          <Property Name="userviolationid" Type="String" Nullable="false" />
+          <NavigationProperty Name="UserViolantion" Relationship="Model1.PaymentUserViolantion" FromRole="Payment" ToRole="UserViolantion" />
+          <NavigationProperty Name="TypePayment" Relationship="Model1.PaymentTypePayment" FromRole="Payment" ToRole="TypePayment" />
+        </EntityType>
+        <Association Name="UserViolantionPaymentHistory1">
+          <End Type="Model1.UserViolantion" Role="UserViolantion" Multiplicity="*" />
+          <End Type="Model1.PaymentHistory" Role="PaymentHistory" Multiplicity="1" />
+        </Association>
+        <Association Name="PaymentUserViolantion">
+          <End Type="Model1.UserViolantion" Role="UserViolantion" Multiplicity="*" />
+          <End Type="Model1.Payment" Role="Payment" Multiplicity="1" />
+        </Association>
+        <EntityType Name="TypePayment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" />
+          <Property Name="description" Type="String" Nullable="false" />
+          <Property Name="paymentid" Type="String" Nullable="false" />
+          <NavigationProperty Name="Payment" Relationship="Model1.PaymentTypePayment" FromRole="TypePayment" ToRole="Payment" />
+        </EntityType>
+        <Association Name="PaymentTypePayment">
+          <End Type="Model1.Payment" Role="Payment" Multiplicity="1" />
+          <End Type="Model1.TypePayment" Role="TypePayment" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
