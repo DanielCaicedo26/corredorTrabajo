@@ -13,16 +13,40 @@
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model1" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="Model1Container" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Entity1Set" EntityType="Model1.Entity1" />
-          <EntitySet Name="Entity2Set" EntityType="Model1.Entity2" />
+          <EntitySet Name="UserSet" EntityType="Model1.User" />
+          <EntitySet Name="RolUserSet" EntityType="Model1.RolUser" />
+          <EntitySet Name="Rol" EntityType="Model1.Rol" />
+          <EntitySet Name="AccessLog" EntityType="Model1.AccessLog" />
         </EntityContainer>
-        <EntityType Name="Entity1">
+        <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user" Type="String" Nullable="false" />
+          <Property Name="password" Type="String" Nullable="false" />
+          <Property Name="gmail" Type="String" Nullable="false" />
+          <Property Name="registrationdate" Type="String" Nullable="false" />
+          <Property Name="usernotificationid" Type="String" Nullable="false" />
         </EntityType>
-        <EntityType Name="Entity2">
+        <EntityType Name="RolUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rolid" Type="String" Nullable="false" />
+          <Property Name="userid" Type="String" Nullable="false" />
+          <Property Name="UserId1" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rol">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role" Type="String" Nullable="false" />
+          <Property Name="description" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccessLog">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
