@@ -1,10 +1,12 @@
-public class RolFormPermissionDto
+using System;
+
+namespace corredorTrabajo.Dto
 {
-    public int Id { get; set; }
-    public int RolId { get; set; }
-    public int FormId { get; set; }
+    public class RolFormPermissionDto
+    {
+        public int Id { get; set; }
+        public int RolId { get; set; }
+        public int FormId { get; set; }
+        public int PermissionId { get; set; }
+    }
 }
-
-
-
-

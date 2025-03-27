@@ -1,8 +1,7 @@
-﻿using System;
-  
-public class Class1
+public class TypeInfraccionDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Type_Violation { get; set; }
+    public string Description { get; set; }
+    public decimal ValueViolation { get; set; }
 }

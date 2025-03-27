@@ -1,5 +1,3 @@
-using System;
-
 public class UserNotificationDto
 {
     public int Id { get; set; }

@@ -1,8 +1,6 @@
-﻿using System;
-
-public class Class1
+public class UserInfractionDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public int TypeInfractionId { get; set; }
+    public TypeInfraccionDto TypeInfraction { get; set; }
 }

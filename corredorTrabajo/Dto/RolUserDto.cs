@@ -1,8 +1,13 @@
 ﻿using System;
 
-public class Class1
+namespace corredorTrabajo.Dto
 {
-	public Class1()
-	{
-	}
+    public class RolUserDto
+    {
+        public int Id { get; set; }
+        public int RollId { get; set; }
+        public int UserId { get; set; }
+
+
+    }
 }
