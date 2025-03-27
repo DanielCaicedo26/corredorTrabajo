@@ -1,8 +1,9 @@
-﻿using System;
-
-public class Class1
+public class InformationTypeDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public int typeinfractionid { get; set; }
+    public int Informacioninfraccionid{ get; set; }
 }
+
+
+

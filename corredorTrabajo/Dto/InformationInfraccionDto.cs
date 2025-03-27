@@ -1,8 +1,8 @@
-﻿using System;
-
-public class Class1
+﻿public class InformationInfractionDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public int NumberSMLDV { get; set; }
+    public decimal TotalValue { get; set; }
 }
+
+

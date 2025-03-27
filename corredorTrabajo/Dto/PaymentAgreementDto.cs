@@ -1,8 +1,8 @@
-﻿using System;
-
-public class Class1
+public class PaymentAgreementDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Address { get; set; }
+    public string Neighborhood { get; set; }
+    public decimal FinanceAmount { get; set; }
+    public string AgreementDescription { get; set; }
 }
