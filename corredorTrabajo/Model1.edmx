@@ -69,6 +69,8 @@
             <End Role="Payment" EntitySet="PaymentSet" />
             <End Role="TypePayment" EntitySet="TypePaymentSet" />
           </AssociationSet>
+          <EntitySet Name="PaymentUserSet" EntityType="Model1.PaymentUser" />
+          <EntitySet Name="PaymentagreementSet" EntityType="Model1.Paymentagreement" />
         </EntityContainer>
         <EntityType Name="User">
           <Key>
@@ -257,6 +259,20 @@
           <End Type="Model1.Payment" Role="Payment" Multiplicity="1" />
           <End Type="Model1.TypePayment" Role="TypePayment" Multiplicity="*" />
         </Association>
+        <EntityType Name="PaymentUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="paymentagreement" Type="String" Nullable="false" />
+          <Property Name="personaid" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Paymentagreement">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

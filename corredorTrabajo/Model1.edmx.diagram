@@ -28,6 +28,8 @@
         <AssociationConnector Association="Model1.PaymentUserViolantion" />
         <EntityTypeShape EntityType="Model1.TypePayment" Width="1.5" PointX="18.25" PointY="7.25" />
         <AssociationConnector Association="Model1.PaymentTypePayment" />
+        <EntityTypeShape EntityType="Model1.PaymentUser" Width="1.5" PointX="14.25" PointY="6.25" />
+        <EntityTypeShape EntityType="Model1.Paymentagreement" Width="1.5" PointX="11.625" PointY="7.375" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
