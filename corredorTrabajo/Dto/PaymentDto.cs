@@ -1,8 +1,5 @@
-﻿using System;
-
-public class Class1
+public class PaymentDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string TypePayment { get; set; }
 }

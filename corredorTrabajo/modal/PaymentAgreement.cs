@@ -7,10 +7,7 @@ public class PaymentAgreement
     public string Neighborhood { get; set; }
     public decimal FinanceAmount { get; set; }
     public string AgreementDescription { get; set; }
-    public ICollection<PaymentUser> PaymentUsers { get; set; }
+  
 
-    public PaymentAgreement()
-    {
-        PaymentUsers = new List<PaymentUser>();
-    }
+    
 }

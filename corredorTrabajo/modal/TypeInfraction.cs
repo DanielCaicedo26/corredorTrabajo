@@ -7,10 +7,5 @@ public class TypeInfraction
     public string Description { get; set; }
     public decimal ValueViolation { get; set; }
     public int UserNotificationId { get; set; }
-    public ICollection<UserInfraction> UserInfractions { get; set; }
-
-    public TypeInfraction()
-    {
-        UserInfractions = new List<UserInfraction>();
-    }
+    
 }

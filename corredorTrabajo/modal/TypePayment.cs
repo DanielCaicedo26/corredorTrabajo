@@ -4,5 +4,5 @@ public class TypePayment
     public string Name { get; set; }
     public string Description { get; set; }
     public int PaymentId { get; set; }
-    public Payment Payment { get; set; }
+  
 }

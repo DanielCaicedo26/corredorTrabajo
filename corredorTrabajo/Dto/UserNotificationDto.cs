@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 
-public class Class1
+public class UserNotificationDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Message { get; set; }
+    public DateTime ShippingDate { get; set; }
+    public string State { get; set; }
 }

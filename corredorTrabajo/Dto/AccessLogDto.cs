@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 
-public class Class1
+public class AccessLogDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Action { get; set; }
+    public DateTime Timestamp { get; set; }
+    public string Status { get; set; }
+    public string Details { get; set; }
 }

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 
-public class Class1
+public class UserDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string UserName { get; set; }
+    public string Email { get; set; }
+    public DateTime RegistrationDate { get; set; }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-
-public class Class1
+public class RolDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Role { get; set; }
+    public string Description { get; set; }
 }

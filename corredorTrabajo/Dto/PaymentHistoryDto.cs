@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
-public class Class1
+public class PaymentHistoryDto
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public DateTime PaymentDate { get; set; }
+    public DateTime DiscountDate { get; set; }
 }

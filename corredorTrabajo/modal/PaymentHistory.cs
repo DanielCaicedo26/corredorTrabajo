@@ -6,5 +6,5 @@ public class PaymentHistory
     public DateTime PaymentDate { get; set; }
     public DateTime DiscountDate { get; set; }
     public int UserViolationId { get; set; }
-    public UserViolation UserViolation { get; set; }
+  
 }

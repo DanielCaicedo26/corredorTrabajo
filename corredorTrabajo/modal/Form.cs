@@ -8,10 +8,5 @@ public class Form
     public string Description { get; set; }
     public DateTime DateCreation { get; set; }
     public string Status { get; set; }
-    public ICollection<RolFormPermission> RolFormPermissions { get; set; }
-
-    public Form()
-    {
-        RolFormPermissions = new List<RolFormPermission>();
-    }
+   
 }

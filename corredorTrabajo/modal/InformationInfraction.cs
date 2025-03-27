@@ -7,10 +7,5 @@ public class InformationInfraction
     public decimal MinimumWage { get; set; }
     public decimal ValueSMLDV { get; set; }
     public decimal TotalValue { get; set; }
-    public ICollection<InformationTypeInfraction> InformationTypeInfractions { get; set; }
-
-    public InformationInfraction()
-    {
-        InformationTypeInfractions = new List<InformationTypeInfraction>();
-    }
+   
 }

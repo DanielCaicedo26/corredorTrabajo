@@ -6,10 +6,7 @@ public class Person
     public string Name { get; set; }
     public string LastName { get; set; }
     public string Phone { get; set; }
-    public ICollection<User> Users { get; set; }
+    
 
-    public Person()
-    {
-        Users = new List<User>();
-    }
+    
 }
