@@ -51,6 +51,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="action" Type="String" Nullable="false" />
+          <Property Name="timestamp" Type="String" Nullable="false" />
+          <Property Name="status" Type="String" Nullable="false" />
+          <Property Name="details" Type="String" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
