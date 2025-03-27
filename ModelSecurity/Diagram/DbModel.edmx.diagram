@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e481d643a9dd4114b00a44d371daf91a" Name="Diagram1" ZoomLevel="52" >
+        <EntityTypeShape EntityType="DbModel.User" Width="1.5" PointX="1.125" PointY="4.75" />
+        <EntityTypeShape EntityType="DbModel.Rol" Width="1.5" PointX="3.75" PointY="7.625" />
+        <EntityTypeShape EntityType="DbModel.Module" Width="1.5" PointX="3.25" PointY="1" />
+        <EntityTypeShape EntityType="DbModel.Form" Width="1.5" PointX="8.125" PointY="4.5" />
+        <EntityTypeShape EntityType="DbModel.FormModule" Width="1.5" PointX="5.375" PointY="1" />
+        <EntityTypeShape EntityType="DbModel.RolUser" Width="1.5" PointX="1.25" PointY="8.125" />
+        <EntityTypeShape EntityType="DbModel.RolFormPermission" Width="1.5" PointX="6.125" PointY="8" />
+        <EntityTypeShape EntityType="DbModel.ChangeLog" Width="1.5" PointX="8.5" PointY="1.375" />
+        <AssociationConnector Association="DbModel.RolUserUser" />
+        <AssociationConnector Association="DbModel.RolUserRol" />
+        <AssociationConnector Association="DbModel.RolFormPermissionRol" />
+        <AssociationConnector Association="DbModel.FormModuleModule" />
+        <AssociationConnector Association="DbModel.FormFormModule" />
+        <AssociationConnector Association="DbModel.RolFormPermissionForm" />
+        <EntityTypeShape EntityType="DbModel.Person" Width="1.5" PointX="0.875" PointY="1" />
+        <AssociationConnector Association="DbModel.PersonUser" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
