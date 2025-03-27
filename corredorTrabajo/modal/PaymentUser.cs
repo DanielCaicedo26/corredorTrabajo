@@ -1,8 +1,7 @@
-﻿using System;
-
-public class Class1
+public class PaymentUser
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string PaymentAgreement { get; set; }
+    public int PersonId { get; set; }
+    public Person Person { get; set; }
 }

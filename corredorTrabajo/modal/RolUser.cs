@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
-public class Class1
+public class RolUser
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public int RolId { get; set; }
+    public int UserId { get; set; }
+    public Rol Rol { get; set; }
+    public User User { get; set; }
 }

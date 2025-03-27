@@ -1,8 +1,15 @@
-﻿using System;
+using System.Collections.Generic;
 
-public class Class1
+public class Module
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public string Status { get; set; }
+    public ICollection<ModuloForm> ModuloForms { get; set; }
+
+    public Module()
+    {
+        ModuloForms = new List<ModuloForm>();
+    }
 }

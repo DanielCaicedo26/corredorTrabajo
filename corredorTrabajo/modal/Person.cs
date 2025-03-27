@@ -1,8 +1,15 @@
-﻿using System;
+using System.Collections.Generic;
 
-public class Class1
+public class Person
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string LastName { get; set; }
+    public string Phone { get; set; }
+    public ICollection<User> Users { get; set; }
+
+    public Person()
+    {
+        Users = new List<User>();
+    }
 }

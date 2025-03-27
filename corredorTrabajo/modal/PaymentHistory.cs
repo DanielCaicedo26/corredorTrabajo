@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 
-public class Class1
+public class PaymentHistory
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public DateTime PaymentDate { get; set; }
+    public DateTime DiscountDate { get; set; }
+    public int UserViolationId { get; set; }
+    public UserViolation UserViolation { get; set; }
 }

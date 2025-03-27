@@ -1,8 +1,16 @@
-﻿using System;
+using System.Collections.Generic;
 
-public class Class1
+public class PaymentAgreement
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Address { get; set; }
+    public string Neighborhood { get; set; }
+    public decimal FinanceAmount { get; set; }
+    public string AgreementDescription { get; set; }
+    public ICollection<PaymentUser> PaymentUsers { get; set; }
+
+    public PaymentAgreement()
+    {
+        PaymentUsers = new List<PaymentUser>();
+    }
 }

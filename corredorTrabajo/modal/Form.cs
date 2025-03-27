@@ -1,8 +1,17 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 
-public class Class1
+public class Form
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public DateTime DateCreation { get; set; }
+    public string Status { get; set; }
+    public ICollection<RolFormPermission> RolFormPermissions { get; set; }
+
+    public Form()
+    {
+        RolFormPermissions = new List<RolFormPermission>();
+    }
 }

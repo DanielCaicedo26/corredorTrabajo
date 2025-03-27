@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 
-public class InformationType
+public class InformationInfraction
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public int NumberSMLDV { get; set; }
+    public decimal MinimumWage { get; set; }
+    public decimal ValueSMLDV { get; set; }
+    public decimal TotalValue { get; set; }
     public ICollection<InformationTypeInfraction> InformationTypeInfractions { get; set; }
 
-    public InformationType()
+    public InformationInfraction()
     {
         InformationTypeInfractions = new List<InformationTypeInfraction>();
     }

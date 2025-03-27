@@ -1,8 +1,13 @@
-﻿using System;
+using System;
 
-public class Class1
+public class UserNotification
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Message { get; set; }
+    public DateTime ShippingDate { get; set; }
+    public string State { get; set; }
+    public int UserId { get; set; }
+    public User User { get; set; }
+    public int TypeNotificationId { get; set; }
+    public TypeNotification TypeNotification { get; set; }
 }

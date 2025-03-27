@@ -1,8 +1,12 @@
-﻿using System;
+using System;
 
-public class Class1
+public class AccessLog
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public string Action { get; set; }
+    public DateTime Timestamp { get; set; }
+    public string Status { get; set; }
+    public string Details { get; set; }
+    public int UserId { get; set; }
+    public User User { get; set; }
 }

@@ -1,8 +1,11 @@
-﻿using System;
+using System.Collections.Generic;
 
-public class Class1
+public class ModuloForm
 {
-	public Class1()
-	{
-	}
+    public int Id { get; set; }
+    public int RolPermissionId { get; set; }
+    public int FormId { get; set; }
+    public int ModuleId { get; set; }
+    public Form Form { get; set; }
+    public Module Module { get; set; }
 }
