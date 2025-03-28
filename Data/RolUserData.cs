@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Entity.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -28,9 +29,9 @@ namespace corredorTrabajo.Data
         /// Obtiene todos los registros de roles de usuarios almacenados en la base de datos.
         /// </summary>
         /// <returns>Lista de relaciones usuario-rol.</returns>
-        public async Task<IEnumerable<RolUserDto>> GetAllAsync()
+        public async Task<IEnumerable<RolUser>> GetAllAsync()
         {
-            return await _context.Set<RolUserDto>().ToListAsync();
+            return await _context.Set<RolUser>().ToListAsync();
         }
 
         /// <summary>
@@ -38,11 +39,11 @@ namespace corredorTrabajo.Data
         /// </summary>
         /// <param name="id">Identificador único de la relación.</param>
         /// <returns>El registro encontrado o null si no existe.</returns>
-        public async Task<RolUserDto?> GetByIdAsync(int id)
+        public async Task<RolUser?> GetByIdAsync(int id)
         {
             try
             {
-                return await _context.Set<RolUserDto>().FindAsync(id);
+                return await _context.Set<RolUser>().FindAsync(id);
             }
             catch (Exception ex)
             {
@@ -56,11 +57,11 @@ namespace corredorTrabajo.Data
         /// </summary>
         /// <param name="rolUser">Instancia de la relación usuario-rol a crear.</param>
         /// <returns>La relación creada.</returns>
-        public async Task<RolUserDto> CreateAsync(RolUserDto rolUser)
+        public async Task<RolUser> CreateAsync(RolUser rolUser)
         {
             try
             {
-                await _context.Set<RolUserDto>().AddAsync(rolUser);
+                await _context.Set<RolUser>().AddAsync(rolUser);
                 await _context.SaveChangesAsync();
                 return rolUser;
             }
@@ -76,11 +77,11 @@ namespace corredorTrabajo.Data
         /// </summary>
         /// <param name="rolUser">Objeto con la información actualizada.</param>
         /// <returns>True si la operación fue exitosa, False en caso contrario.</returns>
-        public async Task<bool> UpdateAsync(RolUserDto rolUser)
+        public async Task<bool> UpdateAsync(RolUser rolUser)
         {
             try
             {
-                _context.Set<RolUserDto>().Update(rolUser);
+                _context.Set<RolUser>().Update(rolUser);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -100,11 +101,11 @@ namespace corredorTrabajo.Data
         {
             try
             {
-                var rolUser = await _context.Set<RolUserDto>().FindAsync(id);
+                var rolUser = await _context.Set<RolUser>().FindAsync(id);
                 if (rolUser == null)
                     return false;
 
-                _context.Set<RolUserDto>().Remove(rolUser);
+                _context.Set<RolUser>().Remove(rolUser);
                 await _context.SaveChangesAsync();
                 return true;
             }

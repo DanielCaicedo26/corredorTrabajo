@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Entity.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -29,9 +30,9 @@ namespace corredorTrabajo.Data
         /// Obtiene todos los registros de acceso almacenados en la base de datos.
         /// </summary>
         /// <returns>Lista de registros de acceso.</returns>
-        public async Task<IEnumerable<AccessLogDto>> GetAllAsync()
+        public async Task<IEnumerable<AccessLog>> GetAllAsync()
         {
-            return await _context.Set<AccessLogDto>().ToListAsync();
+            return await _context.Set<AccessLog>().ToListAsync();
         }
 
         /// <summary>
@@ -39,11 +40,11 @@ namespace corredorTrabajo.Data
         /// </summary>
         /// <param name="id">Identificador único del registro.</param>
         /// <returns>El registro encontrado o null si no existe.</returns>
-        public async Task<AccessLogDto?> GetByIdAsync(int id)
+        public async Task<AccessLog?> GetByIdAsync(int id)
         {
             try
             {
-                return await _context.Set<AccessLogDto>().FindAsync(id);
+                return await _context.Set<AccessLog>().FindAsync(id);
             }
             catch (Exception ex)
             {
@@ -57,11 +58,11 @@ namespace corredorTrabajo.Data
         /// </summary>
         /// <param name="accessLog">Instancia del registro a crear.</param>
         /// <returns>El registro creado.</returns>
-        public async Task<AccessLogDto> CreateAsync(AccessLogDto accessLog)
+        public async Task<AccessLog> CreateAsync(AccessLog accessLog)
         {
             try
             {
-                await _context.Set<AccessLogDto>().AddAsync(accessLog);
+                await _context.Set<AccessLog>().AddAsync(accessLog);
                 await _context.SaveChangesAsync();
                 return accessLog;
             }
@@ -77,11 +78,11 @@ namespace corredorTrabajo.Data
         /// </summary>
         /// <param name="accessLog">Objeto con la información actualizada.</param>
         /// <returns>True si la operación fue exitosa, False en caso contrario.</returns>
-        public async Task<bool> UpdateAsync(AccessLogDto accessLog)
+        public async Task<bool> UpdateAsync(AccessLog accessLog)
         {
             try
             {
-                _context.Set<AccessLogDto>().Update(accessLog);
+                _context.Set<AccessLog>().Update(accessLog);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -101,11 +102,11 @@ namespace corredorTrabajo.Data
         {
             try
             {
-                var accessLog = await _context.Set<AccessLogDto>().FindAsync(id);
+                var accessLog = await _context.Set<AccessLog>().FindAsync(id);
                 if (accessLog == null)
                     return false;
 
-                _context.Set<AccessLogDto>().Remove(accessLog);
+                _context.Set<AccessLog>().Remove(accessLog);
                 await _context.SaveChangesAsync();
                 return true;
             }

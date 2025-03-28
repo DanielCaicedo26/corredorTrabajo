@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Data
+namespace corredorTrabajo.Data
 {
     /// <summary>
     /// Repositorio encargado de la gestión de la entidad Rol en la base de datos.

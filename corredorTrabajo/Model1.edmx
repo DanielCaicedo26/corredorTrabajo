@@ -71,6 +71,39 @@
           </AssociationSet>
           <EntitySet Name="PaymentUserSet" EntityType="Model1.PaymentUser" />
           <EntitySet Name="PaymentagreementSet" EntityType="Model1.Paymentagreement" />
+          <AssociationSet Name="PersonPaymentUser" Association="Model1.PersonPaymentUser">
+            <End Role="Person" EntitySet="PersonSet" />
+            <End Role="PaymentUser" EntitySet="PaymentUserSet" />
+          </AssociationSet>
+          <AssociationSet Name="PaymentUserPaymentagreement" Association="Model1.PaymentUserPaymentagreement">
+            <End Role="PaymentUser" EntitySet="PaymentUserSet" />
+            <End Role="Paymentagreement" EntitySet="PaymentagreementSet" />
+          </AssociationSet>
+          <EntitySet Name="ModuloFormSet" EntityType="Model1.ModuloForm" />
+          <AssociationSet Name="FormModuloForm" Association="Model1.FormModuloForm">
+            <End Role="Form" EntitySet="FormSet" />
+            <End Role="ModuloForm" EntitySet="ModuloFormSet" />
+          </AssociationSet>
+          <EntitySet Name="TypeInfractionSet1" EntityType="Model1.TypeInfraction" />
+          <AssociationSet Name="UserNotificationTypeInfraction" Association="Model1.UserNotificationTypeInfraction">
+            <End Role="UserNotification" EntitySet="UserNotificationSet" />
+            <End Role="TypeInfraction" EntitySet="TypeInfractionSet1" />
+          </AssociationSet>
+          <EntitySet Name="ModuleSet" EntityType="Model1.Module" />
+          <AssociationSet Name="ModuloFormModule" Association="Model1.ModuloFormModule">
+            <End Role="ModuloForm" EntitySet="ModuloFormSet" />
+            <End Role="Module" EntitySet="ModuleSet" />
+          </AssociationSet>
+          <EntitySet Name="PermissionSet" EntityType="Model1.Permission" />
+          <AssociationSet Name="PermissionRolFormPermissionId" Association="Model1.PermissionRolFormPermissionId">
+            <End Role="RolFormPermissionId" EntitySet="RolFormPermissionIdSet" />
+            <End Role="Permission" EntitySet="PermissionSet" />
+          </AssociationSet>
+          <EntitySet Name="UserInfractionSet" EntityType="Model1.UserInfraction" />
+          <AssociationSet Name="TypeInfractionUserInfraction" Association="Model1.TypeInfractionUserInfraction">
+            <End Role="TypeInfraction" EntitySet="TypeInfractionSet1" />
+            <End Role="UserInfraction" EntitySet="UserInfractionSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Key>
@@ -143,6 +176,7 @@
           <Property Name="permissionid" Type="String" Nullable="false" />
           <NavigationProperty Name="Rol" Relationship="Model1.RolRolFormPermissionId" FromRole="RolFormPermissionId" ToRole="Rol" />
           <NavigationProperty Name="Form" Relationship="Model1.RolFormPermissionIdForm" FromRole="RolFormPermissionId" ToRole="Form" />
+          <NavigationProperty Name="Permission" Relationship="Model1.PermissionRolFormPermissionId" FromRole="RolFormPermissionId" ToRole="Permission" />
         </EntityType>
         <Association Name="RolRolFormPermissionId">
           <End Type="Model1.Rol" Role="Rol" Multiplicity="1" />
@@ -158,6 +192,7 @@
           <Property Name="datecreation" Type="String" Nullable="false" />
           <Property Name="status" Type="String" Nullable="false" />
           <NavigationProperty Name="RolFormPermissionId" Relationship="Model1.RolFormPermissionIdForm" FromRole="Form" ToRole="RolFormPermissionId" />
+          <NavigationProperty Name="ModuloForm" Relationship="Model1.FormModuloForm" FromRole="Form" ToRole="ModuloForm" />
         </EntityType>
         <Association Name="RolFormPermissionIdForm">
           <End Type="Model1.RolFormPermissionId" Role="RolFormPermissionId" Multiplicity="*" />
@@ -172,6 +207,7 @@
           <Property Name="shippingdate" Type="String" Nullable="false" />
           <Property Name="state" Type="String" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Model1.UserUserNotification" FromRole="UserNotification" ToRole="User" />
+          <NavigationProperty Name="TypeInfraction" Relationship="Model1.UserNotificationTypeInfraction" FromRole="UserNotification" ToRole="TypeInfraction" />
         </EntityType>
         <Association Name="UserUserNotification">
           <End Type="Model1.User" Role="User" Multiplicity="*" />
@@ -195,6 +231,7 @@
           <Property Name="phone" Type="String" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Model1.UserPerson" FromRole="Person" ToRole="User" />
           <NavigationProperty Name="UserViolantion" Relationship="Model1.PersonUserViolantion" FromRole="Person" ToRole="UserViolantion" />
+          <NavigationProperty Name="PaymentUser" Relationship="Model1.PersonPaymentUser" FromRole="Person" ToRole="PaymentUser" />
         </EntityType>
         <Association Name="UserPerson">
           <End Type="Model1.User" Role="User" Multiplicity="1" />
@@ -266,13 +303,98 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="paymentagreement" Type="String" Nullable="false" />
           <Property Name="personaid" Type="String" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="Model1.PersonPaymentUser" FromRole="PaymentUser" ToRole="Person" />
+          <NavigationProperty Name="Paymentagreement" Relationship="Model1.PaymentUserPaymentagreement" FromRole="PaymentUser" ToRole="Paymentagreement" />
         </EntityType>
         <EntityType Name="Paymentagreement">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Address" Type="String" Nullable="false" />
+          <Property Name="Neighborhood" Type="String" Nullable="false" />
+          <Property Name="FinanceAmount" Type="String" Nullable="false" />
+          <Property Name="AgreementDescripcion" Type="String" Nullable="false" />
+          <NavigationProperty Name="PaymentUser" Relationship="Model1.PaymentUserPaymentagreement" FromRole="Paymentagreement" ToRole="PaymentUser" />
         </EntityType>
+        <Association Name="PersonPaymentUser">
+          <End Type="Model1.Person" Role="Person" Multiplicity="1" />
+          <End Type="Model1.PaymentUser" Role="PaymentUser" Multiplicity="*" />
+        </Association>
+        <Association Name="PaymentUserPaymentagreement">
+          <End Type="Model1.PaymentUser" Role="PaymentUser" Multiplicity="1" />
+          <End Type="Model1.Paymentagreement" Role="Paymentagreement" Multiplicity="*" />
+        </Association>
+        <EntityType Name="ModuloForm">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Form" Relationship="Model1.FormModuloForm" FromRole="ModuloForm" ToRole="Form" />
+          <Property Name="rolpermissionid" Type="String" Nullable="false" />
+          <Property Name="formid" Type="String" Nullable="false" />
+          <Property Name="moduleid" Type="String" Nullable="false" />
+          <NavigationProperty Name="Module" Relationship="Model1.ModuloFormModule" FromRole="ModuloForm" ToRole="Module" />
+        </EntityType>
+        <Association Name="FormModuloForm">
+          <End Type="Model1.Form" Role="Form" Multiplicity="1" />
+          <End Type="Model1.ModuloForm" Role="ModuloForm" Multiplicity="*" />
+        </Association>
+        <EntityType Name="TypeInfraction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="UserNotification" Relationship="Model1.UserNotificationTypeInfraction" FromRole="TypeInfraction" ToRole="UserNotification" />
+          <Property Name="type_violation" Type="String" Nullable="false" />
+          <Property Name="description" Type="String" Nullable="false" />
+          <Property Name="valueviolation" Type="String" Nullable="false" />
+          <Property Name="usernotificationid" Type="String" Nullable="false" />
+          <NavigationProperty Name="UserInfraction" Relationship="Model1.TypeInfractionUserInfraction" FromRole="TypeInfraction" ToRole="UserInfraction" />
+        </EntityType>
+        <Association Name="UserNotificationTypeInfraction">
+          <End Type="Model1.UserNotification" Role="UserNotification" Multiplicity="1" />
+          <End Type="Model1.TypeInfraction" Role="TypeInfraction" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Module">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="ModuloForm" Relationship="Model1.ModuloFormModule" FromRole="Module" ToRole="ModuloForm" />
+          <Property Name="description" Type="String" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" />
+          <Property Name="statu" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="ModuloFormModule">
+          <End Type="Model1.ModuloForm" Role="ModuloForm" Multiplicity="1" />
+          <End Type="Model1.Module" Role="Module" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" />
+          <Property Name="descripcion" Type="String" Nullable="false" />
+          <NavigationProperty Name="RolFormPermissionId" Relationship="Model1.PermissionRolFormPermissionId" FromRole="Permission" ToRole="RolFormPermissionId" />
+        </EntityType>
+        <Association Name="PermissionRolFormPermissionId">
+          <End Type="Model1.RolFormPermissionId" Role="RolFormPermissionId" Multiplicity="*" />
+          <End Type="Model1.Permission" Role="Permission" Multiplicity="1" />
+        </Association>
+        <EntityType Name="UserInfraction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="typeinfractionid" Type="String" Nullable="false" />
+          <NavigationProperty Name="TypeInfraction" Relationship="Model1.TypeInfractionUserInfraction" FromRole="UserInfraction" ToRole="TypeInfraction" />
+        </EntityType>
+        <Association Name="TypeInfractionUserInfraction">
+          <End Type="Model1.TypeInfraction" Role="TypeInfraction" Multiplicity="1" />
+          <End Type="Model1.UserInfraction" Role="UserInfraction" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
