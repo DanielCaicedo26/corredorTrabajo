@@ -1,13 +1,11 @@
-﻿using corredorTrabajo.Data;
+﻿using Data;
 using Entity.Dto;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
+
 namespace Business
 {
-    /// <summary>
-    /// Clase de negocio encargada de la lógica relacionada con los roles del sistema.
-    /// </summary>
     public class RolBusiness
     {
         private readonly RolData _rolData;
@@ -19,9 +17,6 @@ namespace Business
             _logger = logger;
         }
 
-        /// <summary>
-        /// Método para obtener todos los roles como DTOs.
-        /// </summary>
         public async Task<IEnumerable<RolDto>> GetAllRolesAsync()
         {
             try
@@ -31,6 +26,7 @@ namespace Business
                 {
                     Id = rol.Id,
                     Name = rol.Name,
+                    Description = rol.Description, // Asegúrate de mapear todos los campos necesarios
                     Active = rol.Active
                 }).ToList();
 
@@ -43,9 +39,6 @@ namespace Business
             }
         }
 
-        /// <summary>
-        /// Método para obtener un rol por ID como DTO.
-        /// </summary>
         public async Task<RolDto> GetRolByIdAsync(int id)
         {
             if (id <= 0)
@@ -67,6 +60,7 @@ namespace Business
                 {
                     Id = rol.Id,
                     Name = rol.Name,
+                    Description = rol.Description, // Asegúrate de mapear todos los campos necesarios
                     Active = rol.Active
                 };
             }
@@ -77,9 +71,6 @@ namespace Business
             }
         }
 
-        /// <summary>
-        /// Método para crear un rol desde un DTO.
-        /// </summary>
         public async Task<RolDto> CreateRolAsync(RolDto rolDto)
         {
             try
@@ -89,6 +80,7 @@ namespace Business
                 var rol = new Rol
                 {
                     Name = rolDto.Name,
+                    Description = rolDto.Description, // Asegúrate de mapear todos los campos necesarios
                     Active = rolDto.Active
                 };
 
@@ -98,6 +90,7 @@ namespace Business
                 {
                     Id = rolCreado.Id,
                     Name = rolCreado.Name,
+                    Description = rolCreado.Description, // Asegúrate de mapear todos los campos necesarios
                     Active = rolCreado.Active
                 };
             }
@@ -108,9 +101,6 @@ namespace Business
             }
         }
 
-        /// <summary>
-        /// Método para actualizar un rol desde un DTO.
-        /// </summary>
         public async Task<RolDto> UpdateRolAsync(RolDto rolDto)
         {
             try
@@ -121,6 +111,7 @@ namespace Business
                 {
                     Id = rolDto.Id,
                     Name = rolDto.Name,
+                    Description = rolDto.Description, // Asegúrate de mapear todos los campos necesarios
                     Active = rolDto.Active
                 };
 
@@ -139,9 +130,6 @@ namespace Business
             }
         }
 
-        /// <summary>
-        /// Método para eliminar un rol por ID.
-        /// </summary>
         public async Task DeleteRolAsync(int id)
         {
             if (id <= 0)
@@ -165,9 +153,6 @@ namespace Business
             }
         }
 
-        /// <summary>
-        /// Método para validar el DTO.
-        /// </summary>
         private void ValidateRol(RolDto rolDto)
         {
             if (rolDto == null)

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace Entity.Model
 {
     public class Rol
@@ -8,5 +6,7 @@ namespace Entity.Model
         public int Id { get; set; }
         public string Role { get; set; }
         public string Description { get; set; }
+
+        public bool Active { get; set; }
     }
 }
