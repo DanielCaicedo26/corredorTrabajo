@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace corredorTrabajo.Data
+namespace Data
 {
     public class InformationInfractionData
     {

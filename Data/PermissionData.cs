@@ -5,7 +5,10 @@ using Entity.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class PermissionData
+namespace Data
+{
+
+    public class PermissionData
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<PermissionData> _logger;
@@ -97,4 +100,6 @@ public class PermissionData
             return false;
         }
     }
+}
+}
 }

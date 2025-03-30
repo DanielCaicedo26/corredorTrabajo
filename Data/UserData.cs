@@ -5,7 +5,7 @@ using Entity.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace corredorTrabajo.Data
+namespace Data
 {
 
 

@@ -1,6 +1,10 @@
-public class RolDto
+namespace Entity.Dto
 {
-    public int Id { get; set; }
-    public string Role { get; set; }
-    public string Description { get; set; }
+    public class RolDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool Active { get; set; }
+    }
 }

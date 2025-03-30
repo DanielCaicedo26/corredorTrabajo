@@ -5,7 +5,9 @@ using Entity.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-public class RolFormPermissionData
+namespace Data
+{
+    public class RolFormPermissionData
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<RolFormPermissionData> _logger;
@@ -97,4 +99,6 @@ public class RolFormPermissionData
             return false;
         }
     }
+}
+}
 }

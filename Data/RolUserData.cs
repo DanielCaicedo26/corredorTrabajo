@@ -4,7 +4,7 @@ using Entity.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace corredorTrabajo.Data
+namespace Data
 {
     /// <summary>
     /// Repositorio encargado de la gestión de la entidad RolUser en la base de datos.
