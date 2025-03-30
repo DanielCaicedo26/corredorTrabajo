@@ -1,3 +1,5 @@
+
+namespace Entity.Dto { 
 public class PaymentAgreementDto
 {
     public int Id { get; set; }
@@ -5,4 +7,5 @@ public class PaymentAgreementDto
     public string Neighborhood { get; set; }
     public decimal FinanceAmount { get; set; }
     public string AgreementDescription { get; set; }
+}
 }

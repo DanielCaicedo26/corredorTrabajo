@@ -1,6 +1,10 @@
-public class UserInfractionDto
+
+namespace Entity.Dto
 {
-    public int Id { get; set; }
-    public int TypeInfractionId { get; set; }
-    public string TypeInfraction { get; set; }
+    public class UserInfractionDto
+    {
+        public int Id { get; set; }
+        public int TypeInfractionId { get; set; }
+        public string TypeInfraction { get; set; }
+    }
 }

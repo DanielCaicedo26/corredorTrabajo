@@ -1,6 +1,9 @@
-public class PaymentUserDto
+namespace Entity.Dto
 {
-    public int Id { get; set; }
-    public string PaymentAgreement { get; set; }
-    public int personaid { get; set; }
+    public class PaymentUserDto
+    {
+        public int Id { get; set; }
+        public string PaymentAgreement { get; set; }
+        public int personaid { get; set; }
+    }
 }

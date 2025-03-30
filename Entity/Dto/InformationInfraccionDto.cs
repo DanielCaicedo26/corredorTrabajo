@@ -1,8 +1,11 @@
-﻿public class InformationInfractionDto
+﻿namespace Entity.Dto
 {
-    public int Id { get; set; }
-    public int NumberSMLDV { get; set; }
-    public decimal TotalValue { get; set; }
+    public class InformationInfractionDto
+    {
+        public int Id { get; set; }
+        public int NumberSMLDV { get; set; }
+        public decimal TotalValue { get; set; }
+    }
 }
 
 

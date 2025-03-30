@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-
-public class PaymentAgreement
+namespace Entity.Model
+{
+    public class PaymentAgreement
 {
     public int Id { get; set; }
     public string Address { get; set; }
@@ -10,4 +11,5 @@ public class PaymentAgreement
   
 
     
+}
 }

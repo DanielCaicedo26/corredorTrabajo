@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 
-public class UserViolation
+namespace Entity.Model
+{
+
+    public class UserViolation
 {
     public int Id { get; set; }
     public DateTime DateViolation { get; set; }
@@ -11,4 +14,5 @@ public class UserViolation
     public int PersonId { get; set; }
  
    
+}
 }

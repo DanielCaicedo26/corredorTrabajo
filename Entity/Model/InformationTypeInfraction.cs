@@ -1,4 +1,7 @@
-public class InformationTypeInfraction
+
+namespace Entity.Model
+{
+    public class InformationTypeInfraction
 {
     public int Id { get; set; }
     public string Type_Violation { get; set; }
@@ -6,4 +9,5 @@ public class InformationTypeInfraction
     public string Valueviolation { get; set; }
     public int Usernotificationid { get; set; }
 
+}
 }

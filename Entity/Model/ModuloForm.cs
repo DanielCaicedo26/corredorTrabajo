@@ -1,14 +1,12 @@
-﻿using System;
+using System.Collections.Generic;
 
-namespace Entity.Dto
+namespace Entity.Model
 {
-    public class ModuleFormDto
+    public class ModuloForm
     {
         public int Id { get; set; }
         public int RolPermissionId { get; set; }
         public int FormId { get; set; }
-        public string ModuleId { get; set; }
+        public int ModuleId { get; set; }
     }
 }
-
-

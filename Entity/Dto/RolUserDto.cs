@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace corredorTrabajo.Dto
+namespace Entity.Dto
 {
     public class RolUserDto
     {
