@@ -104,6 +104,11 @@
             <End Role="TypeInfraction" EntitySet="TypeInfractionSet1" />
             <End Role="UserInfraction" EntitySet="UserInfractionSet" />
           </AssociationSet>
+          <EntitySet Name="AuditLogSet" EntityType="Model1.AuditLog" />
+          <AssociationSet Name="AuditLogUser" Association="Model1.AuditLogUser">
+            <End Role="AuditLog" EntitySet="AuditLogSet" />
+            <End Role="User" EntitySet="UserSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Key>
@@ -120,6 +125,7 @@
           <NavigationProperty Name="UserNotification" Relationship="Model1.UserUserNotification" FromRole="User" ToRole="UserNotification" />
           <Property Name="UserNotificationId1" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Person" Relationship="Model1.UserPerson" FromRole="User" ToRole="Person" />
+          <NavigationProperty Name="AuditLog" Relationship="Model1.AuditLogUser" FromRole="User" ToRole="AuditLog" />
         </EntityType>
         <EntityType Name="RolUser">
           <Key>
@@ -394,6 +400,23 @@
         <Association Name="TypeInfractionUserInfraction">
           <End Type="Model1.TypeInfraction" Role="TypeInfraction" Multiplicity="1" />
           <End Type="Model1.UserInfraction" Role="UserInfraction" Multiplicity="*" />
+        </Association>
+        <EntityType Name="AuditLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="table_name" Type="String" Nullable="false" />
+          <Property Name="recordid" Type="String" Nullable="false" />
+          <Property Name="userid" Type="String" Nullable="false" />
+          <Property Name="actiontype" Type="String" Nullable="false" />
+          <Property Name="change_details" Type="String" Nullable="false" />
+          <Property Name="datetime" Type="String" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Model1.AuditLogUser" FromRole="AuditLog" ToRole="User" />
+        </EntityType>
+        <Association Name="AuditLogUser">
+          <End Type="Model1.AuditLog" Role="AuditLog" Multiplicity="1" />
+          <End Type="Model1.User" Role="User" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
