@@ -5,6 +5,10 @@ using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
 
+// Definir alias para evitar la referencia ambigua
+using CustomValidationException = Utilities.Exceptions.ValidationException;
+using DataAnnotationsValidationException = System.ComponentModel.DataAnnotations.ValidationException;
+
 namespace Business
 {
     public class UserBusiness
@@ -37,7 +41,7 @@ namespace Business
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó obtener un usuario con ID inválido: {UserId}", id);
-                throw new ValidationException("id", "El ID del usuario debe ser mayor que cero");
+                throw new CustomValidationException("id", "El ID del usuario debe ser mayor que cero");
             }
 
             try
@@ -119,7 +123,7 @@ namespace Business
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó eliminar un usuario con ID inválido: {UserId}", id);
-                throw new ValidationException("id", "El ID del usuario debe ser mayor que cero");
+                throw new CustomValidationException("id", "El ID del usuario debe ser mayor que cero");
             }
 
             try
@@ -141,25 +145,25 @@ namespace Business
         {
             if (userDto == null)
             {
-                throw new ValidationException("El objeto usuario no puede ser nulo");
+                throw new CustomValidationException("El objeto usuario no puede ser nulo");
             }
 
             if (string.IsNullOrWhiteSpace(userDto.UserName))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un usuario con UserName vacío");
-                throw new ValidationException("UserName", "El nombre de usuario es obligatorio");
+                throw new CustomValidationException("UserName", "El nombre de usuario es obligatorio");
             }
 
             if (string.IsNullOrWhiteSpace(userDto.Email))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un usuario con Email vacío");
-                throw new System.ComponentModel.DataAnnotations.ValidationException("Email", "El email es obligatorio");
+                throw new DataAnnotationsValidationException("El email es obligatorio");
             }
 
             if (string.IsNullOrWhiteSpace(userDto.Password))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un usuario con Password vacío");
-                throw new ValidationException("Password", "La contraseña es obligatoria");
+                throw new CustomValidationException("Password", "La contraseña es obligatoria");
             }
         }
 

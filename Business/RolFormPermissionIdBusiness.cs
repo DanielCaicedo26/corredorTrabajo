@@ -37,7 +37,7 @@ namespace Business
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó obtener una relación Rol-Form-Permiso con ID inválido: {Id}", id);
-                throw new ValidationException("id", "El ID debe ser mayor que cero");
+                throw new ArgumentException("El ID debe ser mayor que cero", nameof(id));
             }
 
             try
@@ -103,7 +103,7 @@ namespace Business
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó eliminar una relación Rol-Form-Permiso con ID inválido: {Id}", id);
-                throw new ValidationException("id", "El ID debe ser mayor que cero");
+                throw new ArgumentException("El ID debe ser mayor que cero", nameof(id));
             }
 
             try
@@ -125,25 +125,25 @@ namespace Business
         {
             if (dto == null)
             {
-                throw new ValidationException("El objeto no puede ser nulo");
+                throw new ArgumentException("El objeto no puede ser nulo", nameof(dto));
             }
 
             if (dto.RolId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar una relación con RolId inválido");
-                throw new ValidationException("RolId", "El RolId debe ser mayor que cero");
+                throw new ArgumentException("El RolId debe ser mayor que cero", nameof(dto.RolId));
             }
 
             if (dto.FormId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar una relación con FormId inválido");
-                throw new ValidationException("FormId", "El FormId debe ser mayor que cero");
+                throw new ArgumentException("El FormId debe ser mayor que cero", nameof(dto.FormId));
             }
 
             if (dto.PermissionId <= 0)
             {
                 _logger.LogWarning("Se intentó crear/actualizar una relación con PermissionId inválido");
-                throw new ValidationException("PermissionId", "El PermissionId debe ser mayor que cero");
+                throw new ArgumentException("El PermissionId debe ser mayor que cero", nameof(dto.PermissionId));
             }
         }
 

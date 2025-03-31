@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Data;
+﻿using Data;
 using Entity.Dto;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -7,111 +6,168 @@ using Utilities.Exceptions;
 
 namespace Business
 {
-    public class RoleUserBusiness
+    public class RolUserBusiness
     {
-        private readonly RoleUserData _roleUserData;
-        private readonly ILogger<RoleUserBusiness> _logger;
+        private readonly RolUserData _rolUserData;
+        private readonly ILogger<RolUserBusiness> _logger;
 
-        public RoleUserBusiness(RoleUserData roleUserData, ILogger<RoleUserBusiness> logger)
+        public RolUserBusiness(RolUserData rolUserData, ILogger<RolUserBusiness> logger)
         {
-            _roleUserData = roleUserData;
+            _rolUserData = rolUserData;
             _logger = logger;
         }
 
-        public async Task<IEnumerable<RoleUserDto>> GetAllRoleUsersAsync()
+        public async Task<IEnumerable<RolUserDto>> GetAllRolUsersAsync()
         {
             try
             {
-                var roleUsers = await _roleUserData.GetAllAsync();
-                return roleUsers.Select(MapToDto).ToList();
+                var rolesUsers = await _rolUserData.GetAllAsync();
+                return rolesUsers.Select(MapToDto).ToList();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener todas las asignaciones de roles a usuarios");
-                throw new ExternalServiceException("Base de datos", "Error al recuperar la lista de asignaciones", ex);
+                _logger.LogError(ex, "Error al obtener todos los roles de usuario");
+                throw new ExternalServiceException("Base de datos", "Error al recuperar la lista de roles de usuario", ex);
             }
         }
 
-        public async Task<RoleUserDto> GetRoleUserByIdAsync(int id)
+        public async Task<RolUserDto> GetRolUserByIdAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intentó obtener una asignación con ID inválido: {Id}", id);
-                throw new ValidationException("id", "El ID de la asignación debe ser mayor que cero");
+                _logger.LogWarning("Se intentó obtener un RolUser con ID inválido: {RolUserId}", id);
+                throw new ValidationException("id", "El ID debe ser mayor que cero");
             }
 
             try
             {
-                var roleUser = await _roleUserData.GetByIdAsync(id);
-                if (roleUser == null)
+                var rolUser = await _rolUserData.GetByIdAsync(id);
+                if (rolUser == null)
                 {
-                    _logger.LogInformation("No se encontró ninguna asignación con ID: {Id}", id);
-                    throw new EntityNotFoundException("RoleUser", id);
+                    _logger.LogInformation("No se encontró ningún RolUser con ID: {RolUserId}", id);
+                    throw new EntityNotFoundException("RolUser", id);
                 }
 
-                return MapToDto(roleUser);
+                return MapToDto(rolUser);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener la asignación con ID: {Id}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al recuperar la asignación con ID {id}", ex);
+                _logger.LogError(ex, "Error al obtener el RolUser con ID: {RolUserId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al recuperar el RolUser con ID {id}", ex);
             }
         }
 
-        public async Task<RoleUserDto> AssignRoleToUserAsync(RoleUserDto roleUserDto)
+        public async Task<RolUserDto> CreateRolUserAsync(RolUserDto rolUserDto)
         {
             try
             {
-                ValidateRoleUser(roleUserDto);
+                ValidateRolUser(rolUserDto);
 
-                var roleUser = MapToEntity(roleUserDto);
-                var createdRoleUser = await _roleUserData.CreateAsync(roleUser);
+                var rolUser = new RolUser
+                {
+                    RolId = rolUserDto.RolId,
+                    UserId = rolUserDto.UserId
+                };
 
-                return MapToDto(createdRoleUser);
+                var createdRolUser = await _rolUserData.CreateAsync(rolUser);
+                return MapToDto(createdRolUser);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al asignar un rol al usuario");
-                throw new ExternalServiceException("Base de datos", "Error al asignar el rol", ex);
+                _logger.LogError(ex, "Error al crear un nuevo RolUser");
+                throw new ExternalServiceException("Base de datos", "Error al crear el RolUser", ex);
             }
         }
 
-        public async Task RemoveRoleFromUserAsync(int id)
+        public async Task<RolUserDto> UpdateRolUserAsync(RolUserDto rolUserDto)
+        {
+            try
+            {
+                ValidateRolUser(rolUserDto);
+
+                var rolUser = new RolUser
+                {
+                    Id = rolUserDto.Id,
+                    RolId = rolUserDto.RolId,
+                    UserId = rolUserDto.UserId
+                };
+
+                var updated = await _rolUserData.UpdateAsync(rolUser);
+                if (!updated)
+                {
+                    throw new ExternalServiceException("Base de datos", "Error al actualizar el RolUser");
+                }
+
+                return rolUserDto;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar el RolUser con ID: {RolUserId}", rolUserDto?.Id);
+                throw new ExternalServiceException("Base de datos", "Error al actualizar el RolUser", ex);
+            }
+        }
+
+        public async Task DeleteRolUserAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intentó eliminar una asignación con ID inválido: {Id}", id);
-                throw new ValidationException("id", "El ID de la asignación debe ser mayor que cero");
+                _logger.LogWarning("Se intentó eliminar un RolUser con ID inválido: {RolUserId}", id);
+                throw new ValidationException("id", "El ID debe ser mayor que cero");
             }
 
             try
             {
-                var deleted = await _roleUserData.DeleteAsync(id);
+                var deleted = await _rolUserData.DeleteAsync(id);
                 if (!deleted)
                 {
-                    throw new ExternalServiceException("Base de datos", "Error al eliminar la asignación de rol");
+                    throw new ExternalServiceException("Base de datos", "Error al eliminar el RolUser");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar la asignación con ID: {Id}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al eliminar la asignación con ID {id}", ex);
+                _logger.LogError(ex, "Error al eliminar el RolUser con ID: {RolUserId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar el RolUser con ID {id}", ex);
             }
         }
 
-        private void ValidateRoleUser(RoleUserDto roleUserDto)
+        private void ValidateRolUser(RolUserDto rolUserDto)
         {
-            if (roleUserDto == null)
+            if (rolUserDto == null)
             {
-                throw new ValidationException("El objeto de asignación de rol no puede ser nulo");
+                throw new ValidationException("El objeto RolUser no puede ser nulo");
             }
 
-            if (roleUserDto.RoleId <= 0)
+            if (rolUserDto.RolId <= 0)
             {
-                _logger.LogWarning("Se intentó asignar un rol con ID inválido: {RoleId}", roleUserDto.RoleId);
-                throw new ValidationException("RoleId", "El ID del rol debe ser mayor que cero");
+                _logger.LogWarning("Se intentó asignar un RolUser con RolId inválido");
+                throw new ValidationException("RolId", "El RolId debe ser mayor que cero");
             }
 
-            if (roleUserDto.UserId <= 0)
+            if (rolUserDto.UserId <= 0)
             {
-                _logger.LogWarning("Se intentó asignar un usuario_
+                _logger.LogWarning("Se intentó asignar un RolUser con UserId inválido");
+                throw new ValidationException("UserId", "El UserId debe ser mayor que cero");
+            }
+        }
+
+        private static RolUserDto MapToDto(RolUser rolUser)
+        {
+            return new RolUserDto
+            {
+                Id = rolUser.Id,
+                RolId = rolUser.RolId,
+                UserId = rolUser.UserId
+            };
+        }
+
+        private static RolUser MapToEntity(RolUserDto rolUserDto)
+        {
+            return new RolUser
+            {
+                Id = rolUserDto.Id,
+                RolId = rolUserDto.RolId,
+                UserId = rolUserDto.UserId
+            };
+        }
+    }
+}

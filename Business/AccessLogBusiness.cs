@@ -6,12 +6,11 @@ using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
 using Abp.Domain.Entities;
 
-
 namespace Business
 {
     public class AccessLogBusiness
     {
-        private readonly AccessLogData _accessLogData; // Cambiado de AccessLogDto a AccessLogData
+        private readonly AccessLogData _accessLogData;
         private readonly ILogger<AccessLogBusiness> _logger;
 
         public AccessLogBusiness(AccessLogData accessLogData, ILogger<AccessLogBusiness> logger)
@@ -39,7 +38,7 @@ namespace Business
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó obtener un registro de acceso con ID inválido: {LogId}", id);
-                throw new ValidationException("id", "El ID del registro debe ser mayor que cero");
+                throw new ArgumentException("El ID del registro debe ser mayor que cero", nameof(id));
             }
 
             try
@@ -48,7 +47,7 @@ namespace Business
                 if (log == null)
                 {
                     _logger.LogInformation("No se encontró ningún registro con ID: {LogId}", id);
-                    throw new EntityNotFoundException("AccessLog", id);
+                    throw new InvalidOperationException($"No se encontró el registro de acceso con ID {id}");
                 }
 
                 return MapToDto(log);
@@ -65,10 +64,8 @@ namespace Business
             try
             {
                 ValidateLog(logDto);
-
                 var log = MapToEntity(logDto);
                 var createdLog = await _accessLogData.CreateAsync(log);
-
                 return MapToDto(createdLog);
             }
             catch (Exception ex)
@@ -83,7 +80,7 @@ namespace Business
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó eliminar un registro de acceso con ID inválido: {LogId}", id);
-                throw new ValidationException("id", "El ID del registro debe ser mayor que cero");
+                throw new ArgumentException("El ID del registro debe ser mayor que cero", nameof(id));
             }
 
             try
@@ -105,19 +102,17 @@ namespace Business
         {
             if (logDto == null)
             {
-                throw new ValidationException("El objeto de registro de acceso no puede ser nulo");
+                throw new ArgumentNullException(nameof(logDto), "El objeto de registro de acceso no puede ser nulo");
             }
 
             if (string.IsNullOrWhiteSpace(logDto.Action))
             {
-                _logger.LogWarning("Se intentó crear un registro de acceso con una acción vacía");
-                throw new ValidationException("Action", "La acción del registro es obligatoria");
+                throw new ArgumentException("La acción del registro es obligatoria", nameof(logDto.Action));
             }
 
             if (string.IsNullOrWhiteSpace(logDto.Status))
             {
-                _logger.LogWarning("Se intentó crear un registro de acceso con un estado vacío");
-                throw new ValidationException("Status", "El estado del registro es obligatorio");
+                throw new ArgumentException("El estado del registro es obligatorio", nameof(logDto.Status));
             }
         }
 
