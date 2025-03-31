@@ -153,7 +153,7 @@ namespace Business
             if (string.IsNullOrWhiteSpace(userDto.Email))
             {
                 _logger.LogWarning("Se intentó crear/actualizar un usuario con Email vacío");
-                throw new ValidationException("Email", "El email es obligatorio");
+                throw new System.ComponentModel.DataAnnotations.ValidationException("Email", "El email es obligatorio");
             }
 
             if (string.IsNullOrWhiteSpace(userDto.Password))
