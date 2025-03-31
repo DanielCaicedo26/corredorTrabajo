@@ -1,15 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Data;
+﻿using Data;
+using System.ComponentModel.DataAnnotations;
 using Entity.Dto;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
+using Abp.Domain.Entities;
 
 namespace Business
 {
     public class AccessLogBusiness
     {
-        private readonly AccessLogData _accessLogData;
+        private readonly AccessLogData _accessLogData; // Cambiado de AccessLogDto a AccessLogData
         private readonly ILogger<AccessLogBusiness> _logger;
 
         public AccessLogBusiness(AccessLogData accessLogData, ILogger<AccessLogBusiness> logger)
