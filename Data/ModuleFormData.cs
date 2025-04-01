@@ -8,27 +8,27 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class ModuloFormData
+    public class ModuleFormData
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<ModuloFormData> _logger;
+        private readonly ILogger<ModuleFormData> _logger;
 
-        public ModuloFormData(ApplicationDbContext context, ILogger<ModuloFormData> logger)
+        public ModuleFormData(ApplicationDbContext context, ILogger<ModuleFormData> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        public async Task<IEnumerable<ModuloForm>> GetAllAsync()
+        public async Task<IEnumerable<ModuleForm>> GetAllAsync()
         {
-            return await _context.Set<ModuloForm>().ToListAsync();
+            return await _context.Set<ModuleForm>().ToListAsync();
         }
 
-        public async Task<ModuloForm?> GetByIdAsync(int id)
+        public async Task<ModuleForm?> GetByIdAsync(int id)
         {
             try
             {
-                return await _context.Set<ModuloForm>().FindAsync(id);
+                return await _context.Set<ModuleForm>().FindAsync(id);
             }
             catch (Exception ex)
             {
@@ -37,11 +37,11 @@ namespace Data
             }
         }
 
-        public async Task<ModuloForm> CreateAsync(ModuloForm moduloForm)
+        public async Task<ModuleForm> CreateAsync(ModuleForm moduloForm)
         {
             try
             {
-                await _context.Set<ModuloForm>().AddAsync(moduloForm);
+                await _context.Set<ModuleForm>().AddAsync(moduloForm);
                 await _context.SaveChangesAsync();
                 return moduloForm;
             }
@@ -52,11 +52,11 @@ namespace Data
             }
         }
 
-        public async Task<bool> UpdateAsync(ModuloForm moduloForm)
+        public async Task<bool> UpdateAsync(ModuleForm moduloForm)
         {
             try
             {
-                _context.Set<ModuloForm>().Update(moduloForm);
+                _context.Set<ModuleForm>().Update(moduloForm);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -71,11 +71,11 @@ namespace Data
         {
             try
             {
-                var moduloForm = await _context.Set<ModuloForm>().FindAsync(id);
+                var moduloForm = await _context.Set<ModuleForm>().FindAsync(id);
                 if (moduloForm == null)
                     return false;
 
-                _context.Set<ModuloForm>().Remove(moduloForm);
+                _context.Set<ModuleForm>().Remove(moduloForm);
                 await _context.SaveChangesAsync();
                 return true;
             }

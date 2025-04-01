@@ -1,8 +1,8 @@
-using System.Collections.Generic;
+﻿using System;
 
-namespace Entity.Model
+namespace Entity.Dto
 {
-    public class ModuloForm
+    public class ModuleFormDto
     {
         public int Id { get; set; }
         public int RolPermissionId { get; set; }
@@ -10,3 +10,5 @@ namespace Entity.Model
         public int ModuleId { get; set; }
     }
 }
+
+

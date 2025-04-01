@@ -85,5 +85,18 @@ namespace Data
                 return false;
             }
         }
-    }
+
+        public  Task<InformationTypeInfraction> CreateAsync(InformationType infoType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public  Task<bool> UpdateAsync(InformationType infoType)
+        {
+            throw new NotImplementedException();
+        }
+      }
 }
+
+
+
