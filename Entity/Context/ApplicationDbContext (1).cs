@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Reflection;
 
-namespace Entity.Contexts
+namespace Entity.Context
 {
     /// <summary>
     /// Representa el contexto de la base de datos de la aplicación, proporcionando configuraciones y métodos
@@ -94,7 +94,7 @@ namespace Entity.Contexts
         public async Task<IEnumerable<T>> QueryAsync<T>(string text, object parameters = null, int? timeout = null, CommandType? type = null)
         {
             using var command = new DapperEFCoreCommand(this, text, parameters, timeout, type, CancellationToken.None);
-            var connection = this.Database.GetDbConnection();
+            var connection = Database.GetDbConnection();
             return await connection.QueryAsync<T>(command.Definition);
         }
 
@@ -110,7 +110,7 @@ namespace Entity.Contexts
         public async Task<T> QueryFirstOrDefaultAsync<T>(string text, object parameters = null, int? timeout = null, CommandType? type = null)
         {
             using var command = new DapperEFCoreCommand(this, text, parameters, timeout, type, CancellationToken.None);
-            var connection = this.Database.GetDbConnection();
+            var connection = Database.GetDbConnection();
             return await connection.QueryFirstOrDefaultAsync<T>(command.Definition);
         }
 

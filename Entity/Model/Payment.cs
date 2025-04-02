@@ -1,11 +1,10 @@
-namespace Entity.Model
-{
+using Entity.Model;
 
-    public class Payment
+public class Payment
 {
     public int Id { get; set; }
     public string TypePayment { get; set; }
-    public int UserPaymentid { get; set; }
-        public int UserViolationId { get; set; }
-    }
+
+    // Eliminamos UserViolationId, porque la relación se gestiona desde UserViolation
+    public virtual UserViolation UserViolation { get; set; }
 }
