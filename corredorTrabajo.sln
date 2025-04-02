@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Busine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "Entity\Entity.csproj", "{E4CD8E45-7729-4F39-8162-AEE5EEDA5F9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "utilities", "ClassLibrary1\utilities.csproj", "{E21E1322-D628-450A-8418-3D32B5752B58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "ClassLibrary1\Utilities.csproj", "{E21E1322-D628-450A-8418-3D32B5752B58}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "WebApplication1\Web.csproj", "{AC438786-AE94-42FD-B68D-D0C7C4EC4705}"
 EndProject

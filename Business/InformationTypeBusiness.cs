@@ -1,5 +1,4 @@
 ﻿using Data;
-using corredorTrabajo;
 using Entity.Dto;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -9,10 +8,10 @@ namespace Business
 {
     public class InformationTypeBusiness
     {
-        private readonly InformationTypeInfractionData _infoTypeData;
+        private readonly InformationTypeData _infoTypeData;
         private readonly ILogger<InformationTypeBusiness> _logger;
 
-        public InformationTypeBusiness(InformationTypeInfractionData infoTypeData, ILogger<InformationTypeBusiness> logger)
+        public InformationTypeBusiness(InformationTypeData infoTypeData, ILogger<InformationTypeBusiness> logger)
         {
             _infoTypeData = infoTypeData;
             _logger = logger;
@@ -58,7 +57,7 @@ namespace Business
             }
         }
 
-        private InformationTypeDto MapToDto(InformationTypeInfraction infoType)
+        private InformationTypeDto MapToDto(InformationType infoType)
         {
             throw new NotImplementedException();
         }

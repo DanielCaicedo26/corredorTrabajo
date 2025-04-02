@@ -5,6 +5,7 @@ using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
 
+
 // Definir alias para evitar la referencia ambigua
 using CustomValidationException = Utilities.Exceptions.ValidationException;
 using DataAnnotationsValidationException = System.ComponentModel.DataAnnotations.ValidationException;

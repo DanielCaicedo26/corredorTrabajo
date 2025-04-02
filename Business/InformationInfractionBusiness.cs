@@ -4,6 +4,7 @@ using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
 
+
 namespace Business
 {
     public class InformationInfractionBusiness

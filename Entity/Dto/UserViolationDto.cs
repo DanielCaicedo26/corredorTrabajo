@@ -11,7 +11,7 @@ namespace Entity.Dto
         public string State { get; set; }
 
         // Clave foránea hacia Payment
-        public int? PaymentId { get; set; }  // Nullable, porque no todas las violaciones tienen pago
+        public int PaymentId { get; set; }  // Nullable, porque no todas las violaciones tienen pago
         [ForeignKey("PaymentId")]
         public virtual Payment Payment { get; set; }
 

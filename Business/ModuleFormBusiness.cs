@@ -128,11 +128,6 @@ namespace Business
                 throw new ValidationException("El objeto ModuleForm no puede ser nulo");
             }
 
-            if (moduleFormDto.RolPermissionId <= 0)
-            {
-                _logger.LogWarning("Se intentó crear/actualizar un ModuleForm con RolPermissionId inválido");
-                throw new ValidationException("RolPermissionId", "El RolPermissionId debe ser mayor que cero");
-            }
 
             if (moduleFormDto.FormId <= 0)
             {
@@ -150,7 +145,6 @@ namespace Business
         private static ModuleFormDto MapToDto(ModuleForm moduleForm) => new ModuleFormDto
         {
             Id = moduleForm.Id,
-            RolPermissionId = moduleForm.RolPermissionId,
             FormId = moduleForm.FormId,
             ModuleId = moduleForm.ModuleId
         };
@@ -158,7 +152,6 @@ namespace Business
         private static ModuleForm MapToEntity(ModuleFormDto moduleFormDto) => new ModuleForm
         {
             Id = moduleFormDto.Id,
-            RolPermissionId = moduleFormDto.RolPermissionId,
             FormId = moduleFormDto.FormId,
             ModuleId = moduleFormDto.ModuleId
         };

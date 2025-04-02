@@ -18,4 +18,3 @@ namespace Entity.Dto
         public virtual ICollection<RolFormPermission> RolFormPermissions { get; set; } = new List<RolFormPermission>();
     }
 }
-}
