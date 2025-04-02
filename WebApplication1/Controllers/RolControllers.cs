@@ -1,13 +1,10 @@
 ﻿
+
+
 using Business;
 using Entity.Dto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using Utilities.Exceptions;
-
 
 namespace Web.Controllers
     {
