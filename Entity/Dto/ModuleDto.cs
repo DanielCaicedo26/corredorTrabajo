@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Entity.Model;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entity.Dto
 {
@@ -9,6 +11,10 @@ namespace Entity.Dto
         public string Description { get; set; }
         public string Status { get; set; }
 
+        // Relación con ModuleForm
+        public virtual ICollection<ModuleForm> ModuleForms { get; set; } = new List<ModuleForm>();
     }
+
 }
+
 

@@ -7,7 +7,7 @@ namespace Entity.Model
     public string Address { get; set; }
     public string Neighborhood { get; set; }
     public decimal Financeamount { get; set; }
-    public string AgreementaEscription { get; set; }
+    public string AgreementaDescription { get; set; }
   
 
     

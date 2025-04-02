@@ -1,11 +1,21 @@
+using Entity.Model;
 using System;
 
-public class FormDto
+namespace Entity.Dto
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public DateTime DateCreation { get; set; }
-    public string Status { get; set; }
-}
+    public class FormDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime DateCreation { get; set; } = DateTime.UtcNow;
+        public string Status { get; set; }
 
+        // Relación con ModuleForm
+        public virtual ICollection<ModuleForm> ModuleForms { get; set; } = new List<ModuleForm>();
+
+        // Relación con RolFormPermission
+        public virtual ICollection<RolFormPermission> RolFormPermissions { get; set; } = new List<RolFormPermission>();
+    }
+}
+}

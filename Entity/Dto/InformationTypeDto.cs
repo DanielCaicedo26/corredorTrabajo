@@ -1,8 +1,13 @@
-public class InformationTypeDto
+namespace Entity.Dto
 {
-    public int Id { get; set; }
-    public int TypeInfractionId { get; set; }
-    public int InformationTypeId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-}
+
+        public class InformationTypeDto
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+
+        }
+    }
+
+
