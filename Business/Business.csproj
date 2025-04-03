@@ -4,10 +4,12 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>1f312a31-8889-4ee6-8464-a2de83849295</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Abp" Version="10.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="SendGrid" Version="9.29.3" />
   </ItemGroup>
 
