@@ -1,5 +1,4 @@
 ﻿
-using corredorTrabajo.Dto;
 using Data;
 using Entity.Dto;
 using Entity.Model;

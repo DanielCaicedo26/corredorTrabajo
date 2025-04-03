@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entity.Dto
 {
-    public class RolFormPermission
+    public class RolFormPermissionDto
     {
         public int Id { get; set; }
         public int RolId { get; set; }

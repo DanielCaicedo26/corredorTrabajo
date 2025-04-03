@@ -1,13 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using corredorTrabajo.Dto;
-using Data;
-using Entity.Dto;
-using Entity.Model;
+﻿using Data;
 using Microsoft.Extensions.Logging;
+using Entity.Dto;
 using Utilities.Exceptions;
+using Entity.Model;
 
 namespace Business
 {
+    /// <summary>
+    /// Lógica de negocio para la gestión de relaciones entre roles, formularios y permisos.
+    /// </summary>
     public class RolFormPermissionBusiness
     {
         private readonly RolFormPermissionData _rolFormPermissionData;
@@ -19,6 +20,9 @@ namespace Business
             _logger = logger;
         }
 
+        /// <summary>
+        /// Obtiene todas las relaciones Rol-Form-Permiso.
+        /// </summary>
         public async Task<IEnumerable<RolFormPermissionDto>> GetAllAsync()
         {
             try
@@ -33,12 +37,14 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Obtiene una relación Rol-Form-Permiso por su ID.
+        /// </summary>
         public async Task<RolFormPermissionDto> GetByIdAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intentó obtener una relación Rol-Form-Permiso con ID inválido: {Id}", id);
-                throw new ArgumentException("El ID debe ser mayor que cero", nameof(id));
+                throw new ValidationException("El ID debe ser mayor que cero.");
             }
 
             try
@@ -46,7 +52,6 @@ namespace Business
                 var permission = await _rolFormPermissionData.GetByIdAsync(id);
                 if (permission == null)
                 {
-                    _logger.LogInformation("No se encontró ninguna relación Rol-Form-Permiso con ID: {Id}", id);
                     throw new EntityNotFoundException("RolFormPermission", id);
                 }
 
@@ -59,12 +64,19 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Crea una nueva relación Rol-Form-Permiso.
+        /// </summary>
         public async Task<RolFormPermissionDto> CreateAsync(RolFormPermissionDto dto)
         {
+            if (dto == null)
+            {
+                throw new ValidationException("Los datos de la relación son obligatorios.");
+            }
+
             try
             {
                 Validate(dto);
-
                 var entity = MapToEntity(dto);
                 var created = await _rolFormPermissionData.CreateAsync(entity);
 
@@ -77,12 +89,19 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Actualiza una relación existente Rol-Form-Permiso.
+        /// </summary>
         public async Task<RolFormPermissionDto> UpdateAsync(RolFormPermissionDto dto)
         {
+            if (dto == null)
+            {
+                throw new ValidationException("Los datos de la relación son obligatorios.");
+            }
+
             try
             {
                 Validate(dto);
-
                 var entity = MapToEntity(dto);
                 var updated = await _rolFormPermissionData.UpdateAsync(entity);
                 if (!updated)
@@ -99,12 +118,14 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Elimina una relación Rol-Form-Permiso por su ID.
+        /// </summary>
         public async Task DeleteAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intentó eliminar una relación Rol-Form-Permiso con ID inválido: {Id}", id);
-                throw new ArgumentException("El ID debe ser mayor que cero", nameof(id));
+                throw new ValidationException("El ID debe ser mayor que cero.");
             }
 
             try
@@ -122,32 +143,30 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Valida que los datos de la relación Rol-Form-Permiso sean correctos.
+        /// </summary>
         private void Validate(RolFormPermissionDto dto)
         {
-            if (dto == null)
-            {
-                throw new ArgumentException("El objeto no puede ser nulo", nameof(dto));
-            }
-
             if (dto.RolId <= 0)
             {
-                _logger.LogWarning("Se intentó crear/actualizar una relación con RolId inválido");
-                throw new ArgumentException("El RolId debe ser mayor que cero", nameof(dto.RolId));
+                throw new ValidationException("El RolId debe ser mayor que cero.");
             }
 
             if (dto.FormId <= 0)
             {
-                _logger.LogWarning("Se intentó crear/actualizar una relación con FormId inválido");
-                throw new ArgumentException("El FormId debe ser mayor que cero", nameof(dto.FormId));
+                throw new ValidationException("El FormId debe ser mayor que cero.");
             }
 
             if (dto.PermissionId <= 0)
             {
-                _logger.LogWarning("Se intentó crear/actualizar una relación con PermissionId inválido");
-                throw new ArgumentException("El PermissionId debe ser mayor que cero", nameof(dto.PermissionId));
+                throw new ValidationException("El PermissionId debe ser mayor que cero.");
             }
         }
 
+        /// <summary>
+        /// Convierte una entidad en un DTO.
+        /// </summary>
         private static RolFormPermissionDto MapToDto(RolFormPermission entity)
         {
             return new RolFormPermissionDto
@@ -159,6 +178,9 @@ namespace Business
             };
         }
 
+        /// <summary>
+        /// Convierte un DTO en una entidad.
+        /// </summary>
         private static RolFormPermission MapToEntity(RolFormPermissionDto dto)
         {
             return new RolFormPermission

@@ -159,7 +159,7 @@ namespace Business
             Address = agreement.Address,
             Neighborhood = agreement.Neighborhood,
             FinanceAmount = agreement.Financeamount,
-            AgreementDescription = agreement.AgreementaEscription
+            AgreementDescription = agreement.AgreementaDescription
         };
 
         private static PaymentAgreement MapToEntity(PaymentAgreementDto agreementDto) => new PaymentAgreement
@@ -168,7 +168,7 @@ namespace Business
             Address = agreementDto.Address,
             Neighborhood = agreementDto.Neighborhood,
             Financeamount = agreementDto.FinanceAmount,
-            AgreementaEscription = agreementDto.AgreementDescription
+            AgreementaDescription = agreementDto.AgreementDescription
         };
     }
 }

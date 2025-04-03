@@ -1,10 +1,10 @@
 ﻿using Business;
 using Entity.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+using Utilities.Exceptions;
+
+using CustomValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Web.Controllers
 {
@@ -31,7 +31,7 @@ namespace Web.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ModuleForm>), 200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<ModuleForm>>> GetAllModuleForms()
+        public async Task<IActionResult> GetAllModuleForms()
         {
             try
             {
@@ -70,14 +70,14 @@ namespace Web.Controllers
                 var moduleForm = await _moduleFormBusiness.GetModuleFormByIdAsync(id);
                 return Ok(moduleForm);
             }
-            catch (ValidationException ex)
+            catch (CustomValidationException ex)
             {
-                _logger.LogWarning(ex, "Validación fallida para la relación módulo-formulario con ID: {ModuleFormId}", id);
+                _logger.LogWarning("Validación fallida para la relación módulo-formulario con ID: {ModuleFormId}. Error: {ErrorMessage}", id, ex.Message);
                 return BadRequest(new { message = ex.Message });
             }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogInformation(ex, "Relación módulo-formulario no encontrada con ID: {ModuleFormId}", id);
+                _logger.LogWarning("Relación módulo-formulario no encontrada con ID: {ModuleFormId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
@@ -106,14 +106,19 @@ namespace Web.Controllers
                 return BadRequest(new { message = "Los datos de la relación módulo-formulario son obligatorios." });
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "Datos inválidos en la solicitud." });
+            }
+
             try
             {
                 var createdModuleForm = await _moduleFormBusiness.CreateModuleFormAsync(moduleForm);
                 return CreatedAtAction(nameof(GetModuleFormById), new { id = createdModuleForm.Id }, createdModuleForm);
             }
-            catch (ValidationException ex)
+            catch (CustomValidationException ex)
             {
-                _logger.LogWarning(ex, "Validación fallida al crear relación módulo-formulario");
+                _logger.LogWarning("Validación fallida al crear relación módulo-formulario. Error: {ErrorMessage}", ex.Message);
                 return BadRequest(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)

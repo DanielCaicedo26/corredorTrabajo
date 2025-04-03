@@ -6,6 +6,9 @@ using Utilities.Exceptions;
 
 namespace Business
 {
+    /// <summary>
+    /// Lógica de negocio para la gestión de tipos de información.
+    /// </summary>
     public class InformationTypeBusiness
     {
         private readonly InformationTypeData _infoTypeData;
@@ -17,6 +20,9 @@ namespace Business
             _logger = logger;
         }
 
+        /// <summary>
+        /// Obtiene todos los tipos de información.
+        /// </summary>
         public async Task<IEnumerable<InformationTypeDto>> GetAllInformationTypesAsync()
         {
             try
@@ -31,6 +37,9 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Obtiene un tipo de información por su ID.
+        /// </summary>
         public async Task<InformationTypeDto> GetInformationTypeByIdAsync(int id)
         {
             if (id <= 0)
@@ -57,11 +66,9 @@ namespace Business
             }
         }
 
-        private InformationTypeDto MapToDto(InformationType infoType)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// Crea un nuevo tipo de información.
+        /// </summary>
         public async Task<InformationTypeDto> CreateInformationTypeAsync(InformationTypeDto infoTypeDto)
         {
             try
@@ -80,6 +87,9 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Actualiza un tipo de información existente.
+        /// </summary>
         public async Task<InformationTypeDto> UpdateInformationTypeAsync(InformationTypeDto infoTypeDto)
         {
             try
@@ -103,6 +113,9 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Elimina un tipo de información por su ID.
+        /// </summary>
         public async Task DeleteInformationTypeAsync(int id)
         {
             if (id <= 0)
@@ -126,6 +139,9 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Valida que los datos del tipo de información sean correctos.
+        /// </summary>
         private void ValidateInformationType(InformationTypeDto infoTypeDto)
         {
             if (infoTypeDto == null)
@@ -140,6 +156,9 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Convierte una entidad en un DTO.
+        /// </summary>
         private static InformationTypeDto MapToDto(InformationType infoType) => new InformationTypeDto
         {
             Id = infoType.Id,
@@ -147,6 +166,9 @@ namespace Business
             Description = infoType.Description
         };
 
+        /// <summary>
+        /// Convierte un DTO en una entidad.
+        /// </summary>
         private static InformationType MapToEntity(InformationTypeDto infoTypeDto) => new InformationType
         {
             Id = infoTypeDto.Id,

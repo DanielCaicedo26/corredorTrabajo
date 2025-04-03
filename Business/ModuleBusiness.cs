@@ -22,7 +22,13 @@ namespace Business
             try
             {
                 var modules = await _moduleData.GetAllAsync();
-                return modules.Select(MapToDto).ToList();
+                return modules.Select(module => new ModuleDto
+                {
+                    Id = module.Id,
+                    Name = module.Name,
+                    Description = module.Description,
+                    Status = module.Status
+                }).ToList();
             }
             catch (Exception ex)
             {
@@ -48,7 +54,13 @@ namespace Business
                     throw new EntityNotFoundException("Module", id);
                 }
 
-                return MapToDto(module);
+                return new ModuleDto
+                {
+                    Id = module.Id,
+                    Name = module.Name,
+                    Description = module.Description,
+                    Status = module.Status
+                };
             }
             catch (Exception ex)
             {
@@ -63,39 +75,54 @@ namespace Business
             {
                 ValidateModule(moduleDto);
 
-                var module = MapToEntity(moduleDto);
+                var module = new Module
+                {
+                    Name = moduleDto.Name,
+                    Description = moduleDto.Description,
+                    Status = moduleDto.Status
+                };
+
                 var createdModule = await _moduleData.CreateAsync(module);
 
-                return MapToDto(createdModule);
+                return new ModuleDto
+                {
+                    Id = createdModule.Id,
+                    Name = createdModule.Name,
+                    Description = createdModule.Description,
+                    Status = createdModule.Status
+                };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear un nuevo módulo");
+                _logger.LogError(ex, "Error al crear un nuevo módulo: {ModuleName}", moduleDto?.Name ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el módulo", ex);
             }
         }
 
-        public async Task<ModuleDto> UpdateModuleAsync(ModuleDto moduleDto)
+        public async Task<ModuleDto> UpdateModuleAsync(int id, ModuleDto moduleDto)
         {
-            try
+            ValidateModule(moduleDto);
+
+            var existingModule = await _moduleData.GetByIdAsync(id);
+            if (existingModule == null)
             {
-                ValidateModule(moduleDto);
-
-                var module = MapToEntity(moduleDto);
-                var updated = await _moduleData.UpdateAsync(module);
-
-                if (!updated)
-                {
-                    throw new ExternalServiceException("Base de datos", "Error al actualizar el módulo");
-                }
-
-                return moduleDto;
+                _logger.LogWarning("Intento de actualizar un módulo inexistente con ID: {Id}", id);
+                throw new EntityNotFoundException("Module", id);
             }
-            catch (Exception ex)
+
+            existingModule.Name = moduleDto.Name;
+            existingModule.Description = moduleDto.Description;
+            existingModule.Status = moduleDto.Status;
+
+            await _moduleData.UpdateAsync(existingModule);
+
+            return new ModuleDto
             {
-                _logger.LogError(ex, "Error al actualizar el módulo");
-                throw new ExternalServiceException("Base de datos", "Error al actualizar el módulo", ex);
-            }
+                Id = existingModule.Id,
+                Name = existingModule.Name,
+                Description = existingModule.Description,
+                Status = existingModule.Status
+            };
         }
 
         public async Task DeleteModuleAsync(int id)
@@ -108,11 +135,14 @@ namespace Business
 
             try
             {
-                var deleted = await _moduleData.DeleteAsync(id);
-                if (!deleted)
+                var module = await _moduleData.GetByIdAsync(id);
+                if (module == null)
                 {
-                    throw new ExternalServiceException("Base de datos", "Error al eliminar el módulo");
+                    _logger.LogWarning("Intento de eliminar un módulo inexistente con ID: {Id}", id);
+                    throw new EntityNotFoundException("Module", id);
                 }
+
+                await _moduleData.DeleteAsync(id);
             }
             catch (Exception ex)
             {
@@ -140,21 +170,5 @@ namespace Business
                 throw new ValidationException("Status", "El estado es obligatorio");
             }
         }
-
-        private static ModuleDto MapToDto(Module module) => new ModuleDto
-        {
-            Id = module.Id,
-            Name = module.Name,
-            Description = module.Description,
-            Status = module.Status
-        };
-
-        private static Module MapToEntity(ModuleDto moduleDto) => new Module
-        {
-            Id = moduleDto.Id,
-            Name = moduleDto.Name,
-            Description = moduleDto.Description,
-            Status = moduleDto.Status
-        };
     }
 }

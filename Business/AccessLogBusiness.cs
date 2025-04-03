@@ -1,13 +1,14 @@
 ﻿using Data;
-using System.ComponentModel.DataAnnotations;
 using Entity.Dto;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
-using Abp.Domain.Entities;
 
 namespace Business
 {
+    /// <summary>
+    /// Lógica de negocio para la gestión de registros de acceso.
+    /// </summary>
     public class AccessLogBusiness
     {
         private readonly AccessLogData _accessLogData;
@@ -19,6 +20,9 @@ namespace Business
             _logger = logger;
         }
 
+        /// <summary>
+        /// Obtiene todos los registros de acceso.
+        /// </summary>
         public async Task<IEnumerable<AccessLogDto>> GetAllLogsAsync()
         {
             try
@@ -33,12 +37,14 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Obtiene un registro de acceso por su ID.
+        /// </summary>
         public async Task<AccessLogDto> GetLogByIdAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intentó obtener un registro de acceso con ID inválido: {LogId}", id);
-                throw new ArgumentException("El ID del registro debe ser mayor que cero", nameof(id));
+                throw new ValidationException("id", "El ID del registro debe ser mayor que cero");
             }
 
             try
@@ -46,8 +52,7 @@ namespace Business
                 var log = await _accessLogData.GetByIdAsync(id);
                 if (log == null)
                 {
-                    _logger.LogInformation("No se encontró ningún registro con ID: {LogId}", id);
-                    throw new InvalidOperationException($"No se encontró el registro de acceso con ID {id}");
+                    throw new EntityNotFoundException("AccessLog", id);
                 }
 
                 return MapToDto(log);
@@ -59,13 +64,23 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Crea un nuevo registro de acceso.
+        /// </summary>
         public async Task<AccessLogDto> CreateLogAsync(AccessLogDto logDto)
         {
+            if (logDto == null)
+            {
+                throw new ValidationException("El objeto de registro de acceso no puede ser nulo");
+            }
+
             try
             {
                 ValidateLog(logDto);
+
                 var log = MapToEntity(logDto);
                 var createdLog = await _accessLogData.CreateAsync(log);
+
                 return MapToDto(createdLog);
             }
             catch (Exception ex)
@@ -75,68 +90,49 @@ namespace Business
             }
         }
 
-        public async Task DeleteLogAsync(int id)
-        {
-            if (id <= 0)
-            {
-                _logger.LogWarning("Se intentó eliminar un registro de acceso con ID inválido: {LogId}", id);
-                throw new ArgumentException("El ID del registro debe ser mayor que cero", nameof(id));
-            }
-
-            try
-            {
-                var deleted = await _accessLogData.DeleteAsync(id);
-                if (!deleted)
-                {
-                    throw new ExternalServiceException("Base de datos", "Error al eliminar el registro de acceso");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al eliminar el registro de acceso con ID: {LogId}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al eliminar el registro con ID {id}", ex);
-            }
-        }
-
+        /// <summary>
+        /// Valida que los datos del registro de acceso sean correctos.
+        /// </summary>
         private void ValidateLog(AccessLogDto logDto)
         {
-            if (logDto == null)
-            {
-                throw new ArgumentNullException(nameof(logDto), "El objeto de registro de acceso no puede ser nulo");
-            }
-
             if (string.IsNullOrWhiteSpace(logDto.Action))
             {
-                throw new ArgumentException("La acción del registro es obligatoria", nameof(logDto.Action));
+                throw new ValidationException("Action", "La acción del registro es obligatoria");
             }
 
             if (string.IsNullOrWhiteSpace(logDto.Status))
             {
-                throw new ArgumentException("El estado del registro es obligatorio", nameof(logDto.Status));
+                throw new ValidationException("Status", "El estado del registro es obligatorio");
             }
         }
 
-        private static AccessLogDto MapToDto(AccessLog log)
+        /// <summary>
+        /// Convierte una entidad en un DTO.
+        /// </summary>
+        private static AccessLogDto MapToDto(AccessLog entity)
         {
             return new AccessLogDto
             {
-                Id = log.Id,
-                Action = log.Action,
-                Timestamp = log.Timestamp,
-                Status = log.Status,
-                Details = log.Details
+                Id = entity.Id,
+                Action = entity.Action,
+                Timestamp = entity.Timestamp,
+                Status = entity.Status,
+                Details = entity.Details
             };
         }
 
-        private static AccessLog MapToEntity(AccessLogDto logDto)
+        /// <summary>
+        /// Convierte un DTO en una entidad.
+        /// </summary>
+        private static AccessLog MapToEntity(AccessLogDto dto)
         {
             return new AccessLog
             {
-                Id = logDto.Id,
-                Action = logDto.Action,
-                Timestamp = logDto.Timestamp,
-                Status = logDto.Status,
-                Details = logDto.Details
+                Id = dto.Id,
+                Action = dto.Action,
+                Timestamp = dto.Timestamp,
+                Status = dto.Status,
+                Details = dto.Details
             };
         }
     }

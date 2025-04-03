@@ -1,15 +1,12 @@
 ﻿using Business;
-using Entity.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+using Utilities.Exceptions;
+using Entity.Dto;
 
 namespace Web.Controllers
 {
     /// <summary>
-    /// Controlador para la gestión de módulos en el sistema
+    /// Controlador para la gestión de módulos en el sistema.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -26,12 +23,12 @@ namespace Web.Controllers
         }
 
         /// <summary>
-        /// Obtiene todos los módulos del sistema
+        /// Obtiene todos los módulos del sistema.
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<Module>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<ModuleDto>), 200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<Module>>> GetAllModules()
+        public async Task<ActionResult<IEnumerable<ModuleDto>>> GetAllModules()
         {
             try
             {
@@ -51,10 +48,10 @@ namespace Web.Controllers
         }
 
         /// <summary>
-        /// Obtiene un módulo específico por su ID
+        /// Obtiene un módulo específico por su ID.
         /// </summary>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Module), 200)]
+        [ProducesResponseType(typeof(ModuleDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -93,22 +90,22 @@ namespace Web.Controllers
         }
 
         /// <summary>
-        /// Crea un nuevo módulo en el sistema
+        /// Crea un nuevo módulo en el sistema.
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(Module), 201)]
+        [ProducesResponseType(typeof(ModuleDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateModule([FromBody] Module module)
+        public async Task<IActionResult> CreateModule([FromBody] ModuleDto moduleDto)
         {
-            if (module == null)
+            if (moduleDto == null)
             {
                 return BadRequest(new { message = "Los datos del módulo son obligatorios." });
             }
 
             try
             {
-                var createdModule = await _moduleBusiness.CreateModuleAsync(module);
+                var createdModule = await _moduleBusiness.CreateModuleAsync(moduleDto);
                 return CreatedAtAction(nameof(GetModuleById), new { id = createdModule.Id }, createdModule);
             }
             catch (ValidationException ex)
@@ -129,3 +126,4 @@ namespace Web.Controllers
         }
     }
 }
+
