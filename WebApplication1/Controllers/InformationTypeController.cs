@@ -1,7 +1,5 @@
-﻿
-
-using Business;
-using Entity.Model;
+﻿using Business;
+using Entity.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Utilities.Exceptions;
 
@@ -18,6 +16,11 @@ namespace Web.Controllers
         private readonly InformationTypeBusiness _typeBusiness;
         private readonly ILogger<InformationTypeController> _logger;
 
+        /// <summary>
+        /// Constructor del controlador de tipos de información
+        /// </summary>
+        /// <param name="typeBusiness">Capa de negocio de tipos de información</param>
+        /// <param name="logger">Logger para registro de eventos</param>
         public InformationTypeController(InformationTypeBusiness typeBusiness, ILogger<InformationTypeController> logger)
         {
             _typeBusiness = typeBusiness;
@@ -27,10 +30,13 @@ namespace Web.Controllers
         /// <summary>
         /// Obtiene todos los tipos de información del sistema
         /// </summary>
+        /// <returns>Lista de tipos de información</returns>
+        /// <response code="200">Retorna la lista de tipos de información</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<InformationType>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<InformationTypeDto>), 200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<InformationType>>> GetAllInformationTypes()
+        public async Task<IActionResult> GetAllInformationTypes()
         {
             try
             {
@@ -42,28 +48,24 @@ namespace Web.Controllers
                 _logger.LogError(ex, "Error al obtener tipos de información");
                 return StatusCode(500, new { message = ex.Message });
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inesperado al obtener tipos de información");
-                return StatusCode(500, new { message = "Ha ocurrido un error inesperado." });
-            }
         }
 
         /// <summary>
         /// Obtiene un tipo de información específico por su ID
         /// </summary>
+        /// <param name="id">ID del tipo de información</param>
+        /// <returns>Tipo de información solicitado</returns>
+        /// <response code="200">Retorna el tipo de información solicitado</response>
+        /// <response code="400">ID proporcionado no válido</response>
+        /// <response code="404">Tipo de información no encontrado</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(InformationType), 200)]
+        [ProducesResponseType(typeof(InformationTypeDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetInformationTypeById(int id)
         {
-            if (id <= 0)
-            {
-                return BadRequest(new { message = "El ID debe ser un número positivo." });
-            }
-
             try
             {
                 var type = await _typeBusiness.GetInformationTypeByIdAsync(id);
@@ -84,30 +86,25 @@ namespace Web.Controllers
                 _logger.LogError(ex, "Error al obtener tipo de información con ID: {TypeId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inesperado al obtener tipo de información con ID: {TypeId}", id);
-                return StatusCode(500, new { message = "Ha ocurrido un error inesperado." });
-            }
         }
 
         /// <summary>
         /// Crea un nuevo tipo de información en el sistema
         /// </summary>
+        /// <param name="typeDto">Datos del tipo de información a crear</param>
+        /// <returns>Tipo de información creado</returns>
+        /// <response code="201">Retorna el tipo de información creado</response>
+        /// <response code="400">Datos del tipo de información no válidos</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpPost]
-        [ProducesResponseType(typeof(InformationType), 201)]
+        [ProducesResponseType(typeof(InformationTypeDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateInformationType([FromBody] InformationType type)
+        public async Task<IActionResult> CreateInformationType([FromBody] InformationTypeDto typeDto)
         {
-            if (type == null)
-            {
-                return BadRequest(new { message = "Los datos del tipo de información son obligatorios." });
-            }
-
             try
             {
-                var createdType = await _typeBusiness.CreateInformationTypeAsync(type);
+                var createdType = await _typeBusiness.CreateInformationTypeAsync(typeDto);
                 return CreatedAtAction(nameof(GetInformationTypeById), new { id = createdType.Id }, createdType);
             }
             catch (ValidationException ex)
@@ -119,11 +116,6 @@ namespace Web.Controllers
             {
                 _logger.LogError(ex, "Error al crear tipo de información");
                 return StatusCode(500, new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inesperado al crear tipo de información");
-                return StatusCode(500, new { message = "Ha ocurrido un error inesperado." });
             }
         }
     }

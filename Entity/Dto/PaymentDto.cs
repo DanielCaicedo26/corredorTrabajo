@@ -9,6 +9,6 @@ public class PaymentDto
 
         // Eliminamos UserViolationId, porque la relación se gestiona desde UserViolation
         public virtual UserViolation UserViolation { get; set; }
-        public object UserViolationId { get; set; }
+        public int UserViolationId { get; set; }
     }
 }

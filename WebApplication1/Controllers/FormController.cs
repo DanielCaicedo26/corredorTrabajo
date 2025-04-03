@@ -1,6 +1,5 @@
-﻿
-using Business;
-using Entity.Model;
+﻿using Business;
+using Entity.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Utilities.Exceptions;
 
@@ -17,6 +16,11 @@ namespace Web.Controllers
         private readonly FormBusiness _formBusiness;
         private readonly ILogger<FormController> _logger;
 
+        /// <summary>
+        /// Constructor del controlador de formularios
+        /// </summary>
+        /// <param name="formBusiness">Capa de negocio de formularios</param>
+        /// <param name="logger">Logger para registro de eventos</param>
         public FormController(FormBusiness formBusiness, ILogger<FormController> logger)
         {
             _formBusiness = formBusiness;
@@ -26,10 +30,13 @@ namespace Web.Controllers
         /// <summary>
         /// Obtiene todos los formularios del sistema
         /// </summary>
+        /// <returns>Lista de formularios</returns>
+        /// <response code="200">Retorna la lista de formularios</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<Form>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<FormDto>), 200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<Form>>> GetAllForms()
+        public async Task<IActionResult> GetAllForms()
         {
             try
             {
@@ -41,28 +48,24 @@ namespace Web.Controllers
                 _logger.LogError(ex, "Error al obtener formularios");
                 return StatusCode(500, new { message = ex.Message });
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inesperado al obtener formularios");
-                return StatusCode(500, new { message = "Ha ocurrido un error inesperado." });
-            }
         }
 
         /// <summary>
         /// Obtiene un formulario específico por su ID
         /// </summary>
+        /// <param name="id">ID del formulario</param>
+        /// <returns>Formulario solicitado</returns>
+        /// <response code="200">Retorna el formulario solicitado</response>
+        /// <response code="400">ID proporcionado no válido</response>
+        /// <response code="404">Formulario no encontrado</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Form), 200)]
+        [ProducesResponseType(typeof(FormDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetFormById(int id)
         {
-            if (id <= 0)
-            {
-                return BadRequest(new { message = "El ID debe ser un número positivo." });
-            }
-
             try
             {
                 var form = await _formBusiness.GetFormByIdAsync(id);
@@ -83,30 +86,25 @@ namespace Web.Controllers
                 _logger.LogError(ex, "Error al obtener formulario con ID: {FormId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inesperado al obtener formulario con ID: {FormId}", id);
-                return StatusCode(500, new { message = "Ha ocurrido un error inesperado." });
-            }
         }
 
         /// <summary>
         /// Crea un nuevo formulario en el sistema
         /// </summary>
+        /// <param name="formDto">Datos del formulario a crear</param>
+        /// <returns>Formulario creado</returns>
+        /// <response code="201">Retorna el formulario creado</response>
+        /// <response code="400">Datos del formulario no válidos</response>
+        /// <response code="500">Error interno del servidor</response>
         [HttpPost]
-        [ProducesResponseType(typeof(Form), 201)]
+        [ProducesResponseType(typeof(FormDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateForm([FromBody] Form form)
+        public async Task<IActionResult> CreateForm([FromBody] FormDto formDto)
         {
-            if (form == null)
-            {
-                return BadRequest(new { message = "Los datos del formulario son obligatorios." });
-            }
-
             try
             {
-                var createdForm = await _formBusiness.CreateFormAsync(form);
+                var createdForm = await _formBusiness.CreateFormAsync(formDto);
                 return CreatedAtAction(nameof(GetFormById), new { id = createdForm.Id }, createdForm);
             }
             catch (ValidationException ex)
@@ -118,11 +116,6 @@ namespace Web.Controllers
             {
                 _logger.LogError(ex, "Error al crear formulario");
                 return StatusCode(500, new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inesperado al crear formulario");
-                return StatusCode(500, new { message = "Ha ocurrido un error inesperado." });
             }
         }
     }

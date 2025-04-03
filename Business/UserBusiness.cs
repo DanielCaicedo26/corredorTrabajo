@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Data;
+﻿using Data;
 using Entity.Dto;
 using Entity.Model;
 using Microsoft.Extensions.Logging;

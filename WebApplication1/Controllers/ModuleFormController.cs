@@ -1,10 +1,9 @@
-﻿using Business;
-using Entity.Model;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using Utilities.Exceptions;
+﻿
 
-using CustomValidationException = Utilities.Exceptions.ValidationException;
+using Business;
+using Entity.Dto;
+using Microsoft.AspNetCore.Mvc;
+using Utilities.Exceptions;
 
 namespace Web.Controllers
 {
@@ -29,7 +28,7 @@ namespace Web.Controllers
         /// Obtiene todas las relaciones entre módulos y formularios del sistema
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ModuleForm>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<ModuleFormDto>), 200)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetAllModuleForms()
         {
@@ -43,41 +42,31 @@ namespace Web.Controllers
                 _logger.LogError(ex, "Error al obtener relaciones módulo-formulario");
                 return StatusCode(500, new { message = ex.Message });
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inesperado al obtener relaciones módulo-formulario");
-                return StatusCode(500, new { message = "Ha ocurrido un error inesperado." });
-            }
         }
 
         /// <summary>
         /// Obtiene una relación específica entre módulo y formulario por su ID
         /// </summary>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ModuleForm), 200)]
+        [ProducesResponseType(typeof(ModuleFormDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetModuleFormById(int id)
         {
-            if (id <= 0)
-            {
-                return BadRequest(new { message = "El ID debe ser un número positivo." });
-            }
-
             try
             {
                 var moduleForm = await _moduleFormBusiness.GetModuleFormByIdAsync(id);
                 return Ok(moduleForm);
             }
-            catch (CustomValidationException ex)
+            catch (ValidationException ex)
             {
-                _logger.LogWarning("Validación fallida para la relación módulo-formulario con ID: {ModuleFormId}. Error: {ErrorMessage}", id, ex.Message);
+                _logger.LogWarning(ex, "Validación fallida para la relación módulo-formulario con ID: {ModuleFormId}", id);
                 return BadRequest(new { message = ex.Message });
             }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogWarning("Relación módulo-formulario no encontrada con ID: {ModuleFormId}", id);
+                _logger.LogInformation(ex, "Relación módulo-formulario no encontrada con ID: {ModuleFormId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
@@ -85,51 +74,31 @@ namespace Web.Controllers
                 _logger.LogError(ex, "Error al obtener relación módulo-formulario con ID: {ModuleFormId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inesperado al obtener relación módulo-formulario con ID: {ModuleFormId}", id);
-                return StatusCode(500, new { message = "Ha ocurrido un error inesperado." });
-            }
         }
 
         /// <summary>
         /// Crea una nueva relación entre módulo y formulario en el sistema
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(ModuleForm), 201)]
+        [ProducesResponseType(typeof(ModuleFormDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateModuleForm([FromBody] ModuleForm moduleForm)
+        public async Task<IActionResult> CreateModuleForm([FromBody] ModuleFormDto moduleForm)
         {
-            if (moduleForm == null)
-            {
-                return BadRequest(new { message = "Los datos de la relación módulo-formulario son obligatorios." });
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new { message = "Datos inválidos en la solicitud." });
-            }
-
             try
             {
                 var createdModuleForm = await _moduleFormBusiness.CreateModuleFormAsync(moduleForm);
                 return CreatedAtAction(nameof(GetModuleFormById), new { id = createdModuleForm.Id }, createdModuleForm);
             }
-            catch (CustomValidationException ex)
+            catch (ValidationException ex)
             {
-                _logger.LogWarning("Validación fallida al crear relación módulo-formulario. Error: {ErrorMessage}", ex.Message);
+                _logger.LogWarning(ex, "Validación fallida al crear relación módulo-formulario");
                 return BadRequest(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
                 _logger.LogError(ex, "Error al crear relación módulo-formulario");
                 return StatusCode(500, new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inesperado al crear relación módulo-formulario");
-                return StatusCode(500, new { message = "Ha ocurrido un error inesperado." });
             }
         }
     }

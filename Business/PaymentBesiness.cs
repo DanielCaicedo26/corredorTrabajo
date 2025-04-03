@@ -141,14 +141,14 @@ namespace Business
             }
         }
 
-        private static PaymentDto MapToDto(Payment payment) => new PaymentDto
+        public static PaymentDto MapToDto(Payment payment) => new PaymentDto
         {
             Id = payment.Id,
             TypePayment = payment.TypePayment,
             UserViolationId = payment.UserViolationId
         };
 
-        private static Payment MapToEntity(PaymentDto paymentDto) => new Payment
+        public static Payment MapToEntity(PaymentDto paymentDto) => new Payment
         {
             Id = paymentDto.Id,
             TypePayment = paymentDto.TypePayment,

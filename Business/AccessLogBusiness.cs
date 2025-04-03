@@ -67,6 +67,26 @@ namespace Business
         /// <summary>
         /// Crea un nuevo registro de acceso.
         /// </summary>
+        public async Task<AccessLog> CreateAccessLogAsync(AccessLog accessLog)
+        {
+            if (accessLog == null)
+            {
+                throw new ValidationException("El objeto de registro de acceso no puede ser nulo");
+            }
+
+            try
+            {
+                var logDto = MapToDto(accessLog);
+                var createdLogDto = await CreateLogAsync(logDto);
+                return MapToEntity(createdLogDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al crear un nuevo registro de acceso");
+                throw new ExternalServiceException("Base de datos", "Error al crear el registro de acceso", ex);
+            }
+        }
+
         public async Task<AccessLogDto> CreateLogAsync(AccessLogDto logDto)
         {
             if (logDto == null)
@@ -77,10 +97,8 @@ namespace Business
             try
             {
                 ValidateLog(logDto);
-
                 var log = MapToEntity(logDto);
                 var createdLog = await _accessLogData.CreateAsync(log);
-
                 return MapToDto(createdLog);
             }
             catch (Exception ex)

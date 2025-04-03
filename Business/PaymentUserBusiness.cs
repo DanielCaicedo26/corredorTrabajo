@@ -62,10 +62,8 @@ namespace Business
             try
             {
                 ValidatePaymentUser(userDto);
-
                 var user = MapToEntity(userDto);
                 var createdUser = await _paymentUserData.CreateAsync(user);
-
                 return MapToDto(createdUser);
             }
             catch (Exception ex)
@@ -80,15 +78,12 @@ namespace Business
             try
             {
                 ValidatePaymentUser(userDto);
-
                 var user = MapToEntity(userDto);
                 var updated = await _paymentUserData.UpdateAsync(user);
-
                 if (!updated)
                 {
                     throw new ExternalServiceException("Base de datos", "Error al actualizar el PaymentUser");
                 }
-
                 return userDto;
             }
             catch (Exception ex)
@@ -121,7 +116,7 @@ namespace Business
             }
         }
 
-        private void ValidatePaymentUser(PaymentUserDto userDto)
+        public void ValidatePaymentUser(PaymentUserDto userDto)
         {
             if (userDto == null)
             {
@@ -141,18 +136,25 @@ namespace Business
             }
         }
 
-        private static PaymentUserDto MapToDto(PaymentUser user) 
+        public PaymentUserDto MapToDto(PaymentUser user)
         {
-            Id = user.Id,
-            PaymentAgreement = user.Paymentagreement,
-            PersonId = user.Personid
-        };
+            return new PaymentUserDto
+            {
+                Id = user.Id,
+                PaymentAgreement = user.PaymentAgreement,
+                PersonId = user.PersonId
+            };
+        }
 
-        private static PaymentUser MapToEntity(PaymentUserDto userDto) 
+        public PaymentUser MapToEntity(PaymentUserDto userDto)
         {
-            Id = userDto.Id,
-            Paymentagreement = userDto.PaymentAgreement,
-            Personid = userDto.PersonId
-        };
+            return new PaymentUser
+            {
+                Id = userDto.Id,
+                PaymentAgreement = userDto.PaymentAgreement,
+                PersonId = userDto.PersonId
+            };
+        }
     }
 }
+

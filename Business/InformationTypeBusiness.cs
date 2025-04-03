@@ -7,7 +7,7 @@ using Utilities.Exceptions;
 namespace Business
 {
     /// <summary>
-    /// Lógica de negocio para la gestión de tipos de información.
+    /// Clase de negocio encargada de la lógica relacionada con los tipos de información.
     /// </summary>
     public class InformationTypeBusiness
     {
@@ -21,14 +21,19 @@ namespace Business
         }
 
         /// <summary>
-        /// Obtiene todos los tipos de información.
+        /// Obtiene todos los tipos de información en el sistema.
         /// </summary>
         public async Task<IEnumerable<InformationTypeDto>> GetAllInformationTypesAsync()
         {
             try
             {
                 var infoTypes = await _infoTypeData.GetAllAsync();
-                return infoTypes.Select(MapToDto).ToList();
+                return infoTypes.Select(infoType => new InformationTypeDto
+                {
+                    Id = infoType.Id,
+                    Name = infoType.Name,
+                    Description = infoType.Description
+                }).ToList();
             }
             catch (Exception ex)
             {
@@ -57,7 +62,12 @@ namespace Business
                     throw new EntityNotFoundException("InformationType", id);
                 }
 
-                return MapToDto(infoType);
+                return new InformationTypeDto
+                {
+                    Id = infoType.Id,
+                    Name = infoType.Name,
+                    Description = infoType.Description
+                };
             }
             catch (Exception ex)
             {
@@ -67,49 +77,32 @@ namespace Business
         }
 
         /// <summary>
-        /// Crea un nuevo tipo de información.
+        /// Crea un nuevo tipo de información en el sistema.
         /// </summary>
         public async Task<InformationTypeDto> CreateInformationTypeAsync(InformationTypeDto infoTypeDto)
         {
+            ValidateInformationType(infoTypeDto);
+
             try
             {
-                ValidateInformationType(infoTypeDto);
-
-                var infoType = MapToEntity(infoTypeDto);
-                var createdInfoType = await _infoTypeData.CreateAsync(infoType);
-
-                return MapToDto(createdInfoType);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al crear un nuevo tipo de información");
-                throw new ExternalServiceException("Base de datos", "Error al crear el tipo de información", ex);
-            }
-        }
-
-        /// <summary>
-        /// Actualiza un tipo de información existente.
-        /// </summary>
-        public async Task<InformationTypeDto> UpdateInformationTypeAsync(InformationTypeDto infoTypeDto)
-        {
-            try
-            {
-                ValidateInformationType(infoTypeDto);
-
-                var infoType = MapToEntity(infoTypeDto);
-                var updated = await _infoTypeData.UpdateAsync(infoType);
-
-                if (!updated)
+                var infoType = new InformationType
                 {
-                    throw new ExternalServiceException("Base de datos", "Error al actualizar el tipo de información");
-                }
+                    Name = infoTypeDto.Name,
+                    Description = infoTypeDto.Description
+                };
 
-                return infoTypeDto;
+                var createdInfoType = await _infoTypeData.CreateAsync(infoType);
+                return new InformationTypeDto
+                {
+                    Id = createdInfoType.Id,
+                    Name = createdInfoType.Name,
+                    Description = createdInfoType.Description
+                };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al actualizar el tipo de información");
-                throw new ExternalServiceException("Base de datos", "Error al actualizar el tipo de información", ex);
+                _logger.LogError(ex, "Error al crear un nuevo tipo de información: {Name}", infoTypeDto?.Name ?? "null");
+                throw new ExternalServiceException("Base de datos", "Error al crear el tipo de información", ex);
             }
         }
 
@@ -126,6 +119,13 @@ namespace Business
 
             try
             {
+                var infoType = await _infoTypeData.GetByIdAsync(id);
+                if (infoType == null)
+                {
+                    _logger.LogInformation("No se encontró ningún tipo de información para eliminar con ID: {Id}", id);
+                    throw new EntityNotFoundException("InformationType", id);
+                }
+
                 var deleted = await _infoTypeData.DeleteAsync(id);
                 if (!deleted)
                 {
@@ -140,7 +140,7 @@ namespace Business
         }
 
         /// <summary>
-        /// Valida que los datos del tipo de información sean correctos.
+        /// Valida los datos del tipo de información antes de su creación o actualización.
         /// </summary>
         private void ValidateInformationType(InformationTypeDto infoTypeDto)
         {
@@ -151,29 +151,9 @@ namespace Business
 
             if (string.IsNullOrWhiteSpace(infoTypeDto.Name))
             {
-                _logger.LogWarning("Se intentó crear/actualizar un tipo de información sin nombre");
-                throw new ValidationException("Name", "El nombre es obligatorio");
+                _logger.LogWarning("Intento de crear un tipo de información con Name vacío");
+                throw new ValidationException("Name", "El nombre del tipo de información es obligatorio");
             }
         }
-
-        /// <summary>
-        /// Convierte una entidad en un DTO.
-        /// </summary>
-        private static InformationTypeDto MapToDto(InformationType infoType) => new InformationTypeDto
-        {
-            Id = infoType.Id,
-            Name = infoType.Name,
-            Description = infoType.Description
-        };
-
-        /// <summary>
-        /// Convierte un DTO en una entidad.
-        /// </summary>
-        private static InformationType MapToEntity(InformationTypeDto infoTypeDto) => new InformationType
-        {
-            Id = infoTypeDto.Id,
-            Name = infoTypeDto.Name,
-            Description = infoTypeDto.Description
-        };
     }
 }

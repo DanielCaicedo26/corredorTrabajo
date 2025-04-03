@@ -4,9 +4,11 @@ using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
 
-
 namespace Business
 {
+    /// <summary>
+    /// Clase de negocio encargada de la lógica relacionada con las infracciones de información.
+    /// </summary>
     public class InformationInfractionBusiness
     {
         private readonly InformationInfractionData _infractionData;
@@ -18,12 +20,23 @@ namespace Business
             _logger = logger;
         }
 
+        /// <summary>
+        /// Obtiene todas las infracciones registradas en el sistema.
+        /// </summary>
+        /// <returns>Lista de infracciones como DTOs</returns>
         public async Task<IEnumerable<InformationInfractionDto>> GetAllInfractionsAsync()
         {
             try
             {
                 var infractions = await _infractionData.GetAllAsync();
-                return infractions.Select(MapToDto).ToList();
+                return infractions.Select(infraction => new InformationInfractionDto
+                {
+                    Id = infraction.Id,
+                    NumberSMLDV = infraction.NumberSMLDV,
+                    MinimumWage = infraction.MinimumWage,
+                    ValueSMLDV = infraction.ValueSMLDV,
+                    TotalValue = infraction.TotalValue
+                }).ToList();
             }
             catch (Exception ex)
             {
@@ -32,6 +45,11 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Obtiene una infracción por su ID.
+        /// </summary>
+        /// <param name="id">ID de la infracción</param>
+        /// <returns>Infracción encontrada</returns>
         public async Task<InformationInfractionDto> GetInfractionByIdAsync(int id)
         {
             if (id <= 0)
@@ -49,7 +67,14 @@ namespace Business
                     throw new EntityNotFoundException("InformationInfraction", id);
                 }
 
-                return MapToDto(infraction);
+                return new InformationInfractionDto
+                {
+                    Id = infraction.Id,
+                    NumberSMLDV = infraction.NumberSMLDV,
+                    MinimumWage = infraction.MinimumWage,
+                    ValueSMLDV = infraction.ValueSMLDV,
+                    TotalValue = infraction.TotalValue
+                };
             }
             catch (Exception ex)
             {
@@ -58,16 +83,32 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Crea una nueva infracción en el sistema.
+        /// </summary>
+        /// <param name="infractionDto">Datos de la infracción a crear</param>
+        /// <returns>Infracción creada</returns>
         public async Task<InformationInfractionDto> CreateInfractionAsync(InformationInfractionDto infractionDto)
         {
+            ValidateInfraction(infractionDto);
+
             try
             {
-                ValidateInfraction(infractionDto);
+                var infraction = new InformationInfraction
+                {
+                    NumberSMLDV = infractionDto.NumberSMLDV,
+                    MinimumWage = infractionDto.MinimumWage
+                };
 
-                var infraction = MapToEntity(infractionDto);
                 var createdInfraction = await _infractionData.CreateAsync(infraction);
-
-                return MapToDto(createdInfraction);
+                return new InformationInfractionDto
+                {
+                    Id = createdInfraction.Id,
+                    NumberSMLDV = createdInfraction.NumberSMLDV,
+                    MinimumWage = createdInfraction.MinimumWage,
+                    ValueSMLDV = createdInfraction.ValueSMLDV,
+                    TotalValue = createdInfraction.TotalValue
+                };
             }
             catch (Exception ex)
             {
@@ -76,29 +117,10 @@ namespace Business
             }
         }
 
-        public async Task<InformationInfractionDto> UpdateInfractionAsync(InformationInfractionDto infractionDto)
-        {
-            try
-            {
-                ValidateInfraction(infractionDto);
-
-                var infraction = MapToEntity(infractionDto);
-                var updated = await _infractionData.UpdateAsync(infraction);
-
-                if (!updated)
-                {
-                    throw new ExternalServiceException("Base de datos", "Error al actualizar la infracción");
-                }
-
-                return infractionDto;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al actualizar la infracción");
-                throw new ExternalServiceException("Base de datos", "Error al actualizar la infracción", ex);
-            }
-        }
-
+        /// <summary>
+        /// Elimina una infracción por su ID.
+        /// </summary>
+        /// <param name="id">ID de la infracción a eliminar</param>
         public async Task DeleteInfractionAsync(int id)
         {
             if (id <= 0)
@@ -109,6 +131,13 @@ namespace Business
 
             try
             {
+                var infraction = await _infractionData.GetByIdAsync(id);
+                if (infraction == null)
+                {
+                    _logger.LogInformation("No se encontró ninguna infracción para eliminar con ID: {Id}", id);
+                    throw new EntityNotFoundException("InformationInfraction", id);
+                }
+
                 var deleted = await _infractionData.DeleteAsync(id);
                 if (!deleted)
                 {
@@ -122,6 +151,10 @@ namespace Business
             }
         }
 
+        /// <summary>
+        /// Valida los datos de la infracción antes de su creación o actualización.
+        /// </summary>
+        /// <param name="infractionDto">Objeto InformationInfractionDto a validar</param>
         private void ValidateInfraction(InformationInfractionDto infractionDto)
         {
             if (infractionDto == null)
@@ -134,28 +167,6 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar una infracción con NumberSMLDV inválido: {NumberSMLDV}", infractionDto.NumberSMLDV);
                 throw new ValidationException("NumberSMLDV", "El número de SMLDV debe ser mayor que cero");
             }
-
-            if (infractionDto.MinimumWage <= 0)
-            {
-                _logger.LogWarning("Se intentó crear/actualizar una infracción con MinimumWage inválido: {MinimumWage}", infractionDto.MinimumWage);
-                throw new ValidationException("MinimumWage", "El salario mínimo debe ser mayor que cero");
-            }
         }
-
-        private static InformationInfractionDto MapToDto(InformationInfraction infraction) => new InformationInfractionDto
-        {
-            Id = infraction.Id,
-            NumberSMLDV = infraction.NumberSMLDV,
-            MinimumWage = infraction.MinimumWage,
-            ValueSMLDV = infraction.ValueSMLDV,
-            TotalValue = infraction.TotalValue
-        };
-
-        private static InformationInfraction MapToEntity(InformationInfractionDto infractionDto) => new InformationInfraction
-        {
-            Id = infractionDto.Id,
-            NumberSMLDV = infractionDto.NumberSMLDV,
-            MinimumWage = infractionDto.MinimumWage
-        };
     }
 }

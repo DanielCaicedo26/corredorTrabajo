@@ -1,10 +1,6 @@
 ﻿using Business;
-using Entity.Model;
+using Entity.Dto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using Utilities.Exceptions;
 
 namespace Web.Controllers
@@ -30,9 +26,9 @@ namespace Web.Controllers
         /// Obtiene todos los registros de acceso del sistema
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<AccessLog>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<AccessLogDto>), 200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<AccessLog>>> GetAllAccessLogs()
+        public async Task<ActionResult<IEnumerable<AccessLogDto>>> GetAllAccessLogs()
         {
             try
             {
@@ -55,7 +51,7 @@ namespace Web.Controllers
         /// Obtiene un registro de acceso específico por su ID
         /// </summary>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(AccessLog), 200)]
+        [ProducesResponseType(typeof(AccessLogDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -68,7 +64,7 @@ namespace Web.Controllers
 
             try
             {
-                var log = await _accessLogBusiness.GetAccessLogByIdAsync(id);
+                var log = await _accessLogBusiness.GetLogByIdAsync(id);
                 return Ok(log);
             }
             catch (ValidationException ex)
@@ -97,19 +93,19 @@ namespace Web.Controllers
         /// Crea un nuevo registro de acceso en el sistema
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(AccessLog), 201)]
+        [ProducesResponseType(typeof(AccessLogDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateAccessLog([FromBody] AccessLog accessLog)
+        public async Task<IActionResult> CreateAccessLog([FromBody] AccessLogDto accessLogDto)
         {
-            if (accessLog == null)
+            if (accessLogDto == null)
             {
                 return BadRequest(new { message = "Los datos del registro de acceso son obligatorios." });
             }
 
             try
             {
-                var createdLog = await _accessLogBusiness.CreateAccessLogAsync(accessLog);
+                var createdLog = await _accessLogBusiness.CreateLogAsync(accessLogDto);
                 return CreatedAtAction(nameof(GetAccessLogById), new { id = createdLog.Id }, createdLog);
             }
             catch (ValidationException ex)

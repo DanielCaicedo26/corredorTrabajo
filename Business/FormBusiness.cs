@@ -20,7 +20,10 @@ namespace Business
             _logger = logger;
         }
 
-        // Método para obtener todos los formularios como DTOs
+        /// <summary>
+        /// Obtiene todos los formularios en el sistema
+        /// </summary>
+        /// <returns>Lista de formularios como DTOs</returns>
         public async Task<IEnumerable<FormDto>> GetAllFormsAsync()
         {
             try
@@ -42,7 +45,13 @@ namespace Business
             }
         }
 
-        // Método para obtener un formulario por ID como DTO
+        /// <summary>
+        /// Obtiene un formulario por su ID
+        /// </summary>
+        /// <param name="id">ID del formulario</param>
+        /// <returns>Formulario encontrado</returns>
+        /// <exception cref="ValidationException">Si el ID es inválido</exception>
+        /// <exception cref="EntityNotFoundException">Si el formulario no existe</exception>
         public async Task<FormDto> GetFormByIdAsync(int id)
         {
             if (id <= 0)
@@ -76,12 +85,18 @@ namespace Business
             }
         }
 
-        // Método para crear un formulario desde un DTO
+        /// <summary>
+        /// Crea un nuevo formulario en el sistema
+        /// </summary>
+        /// <param name="formDto">Datos del formulario a crear</param>
+        /// <returns>Formulario creado</returns>
+        /// <exception cref="ValidationException">Si los datos del formulario son inválidos</exception>
         public async Task<FormDto> CreateFormAsync(FormDto formDto)
         {
+            ValidateForm(formDto);
+
             try
             {
-                ValidateForm(formDto);
                 var form = new Form
                 {
                     Name = formDto.Name,
@@ -107,7 +122,12 @@ namespace Business
             }
         }
 
-        // Método para eliminar un formulario por ID
+        /// <summary>
+        /// Elimina un formulario por su ID
+        /// </summary>
+        /// <param name="id">ID del formulario a eliminar</param>
+        /// <exception cref="ValidationException">Si el ID es inválido</exception>
+        /// <exception cref="EntityNotFoundException">Si el formulario no existe</exception>
         public async Task DeleteFormAsync(int id)
         {
             if (id <= 0)
@@ -118,6 +138,13 @@ namespace Business
 
             try
             {
+                var form = await _formData.GetByIdAsync(id);
+                if (form == null)
+                {
+                    _logger.LogInformation("No se encontró ningún formulario para eliminar con ID: {FormId}", id);
+                    throw new EntityNotFoundException("Formulario", id);
+                }
+
                 var deleted = await _formData.DeleteAsync(id);
                 if (!deleted)
                 {
@@ -131,7 +158,11 @@ namespace Business
             }
         }
 
-        // Método para validar el DTO
+        /// <summary>
+        /// Valida los datos del formulario antes de su creación o actualización
+        /// </summary>
+        /// <param name="formDto">Objeto FormDto a validar</param>
+        /// <exception cref="ValidationException">Si los datos no son válidos</exception>
         private void ValidateForm(FormDto formDto)
         {
             if (formDto == null)
@@ -141,11 +172,9 @@ namespace Business
 
             if (string.IsNullOrWhiteSpace(formDto.Name))
             {
-                _logger.LogWarning("Se intentó crear/actualizar un formulario con Name vacío");
+                _logger.LogWarning("Intento de crear un formulario con Name vacío");
                 throw new ValidationException("Name", "El nombre del formulario es obligatorio");
             }
         }
     }
 }
-
-
