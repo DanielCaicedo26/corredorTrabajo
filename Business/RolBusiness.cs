@@ -121,6 +121,42 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar un rol con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del rol es obligatorio");
             }
+
+
         }
+
+        // Método para mapear de Rol a RolDto
+        private RolDto MapToDTO(Rol rol)
+        {
+            return new RolDto
+            {
+                Id = rol.Id,
+                Name = rol.Name,
+                Description = rol.Description // Si existe en la entidad
+            };
+        }
+
+        // Método para mapear de RolDto a Rol
+        private Rol MapToEntity(RolDto rolDto)
+        {
+            return new Rol
+            {
+                Id = rolDto.Id,
+                Name = rolDto.Name,
+                Description = rolDto.Description // Si existe en la entidad
+            };
+        }
+
+        // Método para mapear una lista de Rol a una lista de RolDto
+        private IEnumerable<RolDto> MapToDTOList(IEnumerable<Rol> roles)
+        {
+            var rolesDto = new List<RolDto>();
+            foreach (var rol in roles)
+            {
+                rolesDto.Add(MapToDTO(rol));
+            }
+            return rolesDto;
+        }
+
     }
 }

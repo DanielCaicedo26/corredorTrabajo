@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e47584ef66fd4c2e815b1640a54c830e" Name="Diagram1" ZoomLevel="83" >
+      <Diagram DiagramId="e47584ef66fd4c2e815b1640a54c830e" Name="Diagram1" ZoomLevel="55" >
         <EntityTypeShape EntityType="Model1.User" Width="1.5" PointX="8.5" PointY="0.625" />
         <EntityTypeShape EntityType="Model1.RolUser" Width="1.5" PointX="6.125" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Model1.Rol" Width="1.5" PointX="3.5" PointY="0.875" />
@@ -42,8 +42,6 @@
         <AssociationConnector Association="Model1.PermissionRolFormPermissionId" />
         <EntityTypeShape EntityType="Model1.UserInfraction" Width="1.5" PointX="14.125" PointY="8.875" />
         <AssociationConnector Association="Model1.TypeInfractionUserInfraction" />
-        <EntityTypeShape EntityType="Model1.AuditLog" Width="1.5" PointX="1.375" PointY="1.375" />
-        <AssociationConnector Association="Model1.AuditLogUser" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

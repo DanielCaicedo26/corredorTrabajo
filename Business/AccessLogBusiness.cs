@@ -127,7 +127,7 @@ namespace Business
         /// <summary>
         /// Convierte una entidad en un DTO.
         /// </summary>
-        private static AccessLogDto MapToDto(AccessLog entity)
+        public static AccessLogDto MapToDto(AccessLog entity)
         {
             return new AccessLogDto
             {
@@ -142,7 +142,7 @@ namespace Business
         /// <summary>
         /// Convierte un DTO en una entidad.
         /// </summary>
-        private static AccessLog MapToEntity(AccessLogDto dto)
+         public static AccessLog MapToEntity(AccessLogDto dto)
         {
             return new AccessLog
             {
