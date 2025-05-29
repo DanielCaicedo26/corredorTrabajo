@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,8 @@ namespace Entity.Context
         {
             _configuration = configuration;
         }
+
+        public DbSet<Rol> Rol { get; set; }
 
         /// <summary>
         /// Configura los modelos de la base de datos aplicando configuraciones desde ensamblados.

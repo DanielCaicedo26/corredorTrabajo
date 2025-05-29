@@ -22,7 +22,7 @@ namespace Business
             try
             {
                 var payments = await _paymentHistoryData.GetAllAsync();
-                return payments.Select(MapToDto).ToList();
+                return MapToDTOList(payments);
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@ namespace Business
                     throw new EntityNotFoundException("PaymentHistory", id);
                 }
 
-                return MapToDto(payment);
+                return MapToDTO(payment);
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace Business
                 var payment = MapToEntity(paymentDto);
                 var createdPayment = await _paymentHistoryData.CreateAsync(payment);
 
-                return MapToDto(createdPayment);
+                return MapToDTO(createdPayment);
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace Business
                     throw new ExternalServiceException("Base de datos", "Error al actualizar el historial de pago");
                 }
 
-                return paymentDto;
+                return MapToDTO(payment);
             }
             catch (Exception ex)
             {
@@ -147,18 +147,43 @@ namespace Business
             }
         }
 
-        private static PaymentHistoryDto MapToDto(PaymentHistory payment) => new PaymentHistoryDto
+        // Método para mapear de PaymentHistory a PaymentHistoryDto
+        private static PaymentHistoryDto MapToDTO(PaymentHistory payment)
         {
-            Id = payment.Id,
-            PaymentDate = payment.Paymentdate,
-            DiscountDate = payment.Discountdate
-        };
+            return new PaymentHistoryDto
+            {
+                Id = payment.Id,
+                PaymentDate = payment.Paymentdate,
+                DiscountDate = payment.Discountdate
+            };
+        }
 
-        private static PaymentHistory MapToEntity(PaymentHistoryDto paymentDto) => new PaymentHistory
+        // Método para mapear de PaymentHistoryDto a PaymentHistory
+        private static PaymentHistory MapToEntity(PaymentHistoryDto paymentDto)
         {
-            Id = paymentDto.Id,
-            Paymentdate = paymentDto.PaymentDate,
-            Discountdate = paymentDto.DiscountDate
-        };
+            return new PaymentHistory
+            {
+                Id = paymentDto.Id,
+                Paymentdate = paymentDto.PaymentDate,
+                Discountdate = paymentDto.DiscountDate
+            };
+        }
+
+        // Método para mapear una lista de PaymentHistory a una lista de PaymentHistoryDto
+        private IEnumerable<PaymentHistoryDto> MapToDTOList(IEnumerable<PaymentHistory> payments)
+        {
+            var paymentsDto = new List<PaymentHistoryDto>();
+            foreach (var payment in payments)
+            {
+                paymentsDto.Add(MapToDTO(payment));
+            }
+            return paymentsDto;
+        }
     }
 }
+
+
+
+
+
+

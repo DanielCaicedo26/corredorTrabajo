@@ -1,5 +1,4 @@
-﻿
-using Data;
+﻿using Data;
 using Entity.Dto;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -23,7 +22,7 @@ namespace Business
             try
             {
                 var rolesUsers = await _rolUserData.GetAllAsync();
-                return rolesUsers.Select(MapToDto).ToList();
+                return MapToDTOList(rolesUsers);
             }
             catch (Exception ex)
             {
@@ -49,7 +48,7 @@ namespace Business
                     throw new EntityNotFoundException("RolUser", id);
                 }
 
-                return MapToDto(rolUser);
+                return MapToDTO(rolUser);
             }
             catch (Exception ex)
             {
@@ -64,14 +63,9 @@ namespace Business
             {
                 ValidateRolUser(rolUserDto);
 
-                var rolUser = new RolUser
-                {
-                    RolId = rolUserDto.RolId,
-                    UserId = rolUserDto.UserId
-                };
-
+                var rolUser = MapToEntity(rolUserDto);
                 var createdRolUser = await _rolUserData.CreateAsync(rolUser);
-                return MapToDto(createdRolUser);
+                return MapToDTO(createdRolUser);
             }
             catch (Exception ex)
             {
@@ -86,13 +80,7 @@ namespace Business
             {
                 ValidateRolUser(rolUserDto);
 
-                var rolUser = new RolUser
-                {
-                    Id = rolUserDto.Id,
-                    RolId = rolUserDto.RolId,
-                    UserId = rolUserDto.UserId
-                };
-
+                var rolUser = MapToEntity(rolUserDto);
                 var updated = await _rolUserData.UpdateAsync(rolUser);
                 if (!updated)
                 {
@@ -151,7 +139,7 @@ namespace Business
             }
         }
 
-        private static RolUserDto MapToDto(RolUser rolUser)
+        private static RolUserDto MapToDTO(RolUser rolUser)
         {
             return new RolUserDto
             {
@@ -170,5 +158,17 @@ namespace Business
                 UserId = rolUserDto.UserId
             };
         }
+
+        // Método para mapear una lista de RolUser a una lista de RolUserDto
+        private IEnumerable<RolUserDto> MapToDTOList(IEnumerable<RolUser> rolesUsers)
+        {
+            var rolesUsersDto = new List<RolUserDto>();
+            foreach (var rolUser in rolesUsers)
+            {
+                rolesUsersDto.Add(MapToDTO(rolUser));
+            }
+            return rolesUsersDto;
+        }
     }
 }
+

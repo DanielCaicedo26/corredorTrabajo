@@ -28,7 +28,7 @@ namespace Business
             try
             {
                 var permissions = await _rolFormPermissionData.GetAllAsync();
-                return permissions.Select(MapToDto).ToList();
+                return MapToDTOList(permissions);
             }
             catch (Exception ex)
             {
@@ -55,7 +55,7 @@ namespace Business
                     throw new EntityNotFoundException("RolFormPermission", id);
                 }
 
-                return MapToDto(permission);
+                return MapToDTO(permission);
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace Business
                 var entity = MapToEntity(dto);
                 var created = await _rolFormPermissionData.CreateAsync(entity);
 
-                return MapToDto(created);
+                return MapToDTO(created);
             }
             catch (Exception ex)
             {
@@ -109,7 +109,7 @@ namespace Business
                     throw new ExternalServiceException("Base de datos", "Error al actualizar la relación");
                 }
 
-                return dto;
+                return MapToDTO(entity);
             }
             catch (Exception ex)
             {
@@ -164,10 +164,8 @@ namespace Business
             }
         }
 
-        /// <summary>
-        /// Convierte una entidad en un DTO.
-        /// </summary>
-        private static RolFormPermissionDto MapToDto(RolFormPermission entity)
+        // Método para mapear de RolFormPermission a RolFormPermissionDto
+        private static RolFormPermissionDto MapToDTO(RolFormPermission entity)
         {
             return new RolFormPermissionDto
             {
@@ -178,9 +176,7 @@ namespace Business
             };
         }
 
-        /// <summary>
-        /// Convierte un DTO en una entidad.
-        /// </summary>
+        // Método para mapear de RolFormPermissionDto a RolFormPermission
         private static RolFormPermission MapToEntity(RolFormPermissionDto dto)
         {
             return new RolFormPermission
@@ -191,5 +187,23 @@ namespace Business
                 PermissionId = dto.PermissionId
             };
         }
+
+        // Método para mapear una lista de RolFormPermission a una lista de RolFormPermissionDto
+        private IEnumerable<RolFormPermissionDto> MapToDTOList(IEnumerable<RolFormPermission> permissions)
+        {
+            var permissionsDto = new List<RolFormPermissionDto>();
+            foreach (var permission in permissions)
+            {
+                permissionsDto.Add(MapToDTO(permission));
+            }
+            return permissionsDto;
+        }
     }
 }
+
+
+
+
+
+
+

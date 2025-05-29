@@ -28,12 +28,7 @@ namespace Business
             try
             {
                 var infoTypes = await _infoTypeData.GetAllAsync();
-                return infoTypes.Select(infoType => new InformationTypeDto
-                {
-                    Id = infoType.Id,
-                    Name = infoType.Name,
-                    Description = infoType.Description
-                }).ToList();
+                return MapToDTOList(infoTypes);
             }
             catch (Exception ex)
             {
@@ -62,12 +57,7 @@ namespace Business
                     throw new EntityNotFoundException("InformationType", id);
                 }
 
-                return new InformationTypeDto
-                {
-                    Id = infoType.Id,
-                    Name = infoType.Name,
-                    Description = infoType.Description
-                };
+                return MapToDTO(infoType);
             }
             catch (Exception ex)
             {
@@ -85,19 +75,9 @@ namespace Business
 
             try
             {
-                var infoType = new InformationType
-                {
-                    Name = infoTypeDto.Name,
-                    Description = infoTypeDto.Description
-                };
-
+                var infoType = MapToEntity(infoTypeDto);
                 var createdInfoType = await _infoTypeData.CreateAsync(infoType);
-                return new InformationTypeDto
-                {
-                    Id = createdInfoType.Id,
-                    Name = createdInfoType.Name,
-                    Description = createdInfoType.Description
-                };
+                return MapToDTO(createdInfoType);
             }
             catch (Exception ex)
             {
@@ -155,5 +135,41 @@ namespace Business
                 throw new ValidationException("Name", "El nombre del tipo de información es obligatorio");
             }
         }
+
+        // Método para mapear de InformationType a InformationTypeDto
+        private InformationTypeDto MapToDTO(InformationType infoType)
+        {
+            return new InformationTypeDto
+            {
+                Id = infoType.Id,
+                Name = infoType.Name,
+                Description = infoType.Description
+            };
+        }
+
+        // Método para mapear de InformationTypeDto a InformationType
+        private InformationType MapToEntity(InformationTypeDto infoTypeDto)
+        {
+            return new InformationType
+            {
+                Id = infoTypeDto.Id,
+                Name = infoTypeDto.Name,
+                Description = infoTypeDto.Description
+            };
+        }
+
+        // Método para mapear una lista de InformationType a una lista de InformationTypeDto
+        private IEnumerable<InformationTypeDto> MapToDTOList(IEnumerable<InformationType> infoTypes)
+        {
+            var infoTypesDto = new List<InformationTypeDto>();
+            foreach (var infoType in infoTypes)
+            {
+                infoTypesDto.Add(MapToDTO(infoType));
+            }
+            return infoTypesDto;
+        }
     }
 }
+
+
+

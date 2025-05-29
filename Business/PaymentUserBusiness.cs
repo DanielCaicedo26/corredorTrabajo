@@ -22,7 +22,7 @@ namespace Business
             try
             {
                 var users = await _paymentUserData.GetAllAsync();
-                return users.Select(MapToDto).ToList();
+                return MapToDTOList(users);
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@ namespace Business
                     throw new EntityNotFoundException("PaymentUser", id);
                 }
 
-                return MapToDto(user);
+                return MapToDTO(user);
             }
             catch (Exception ex)
             {
@@ -64,7 +64,7 @@ namespace Business
                 ValidatePaymentUser(userDto);
                 var user = MapToEntity(userDto);
                 var createdUser = await _paymentUserData.CreateAsync(user);
-                return MapToDto(createdUser);
+                return MapToDTO(createdUser);
             }
             catch (Exception ex)
             {
@@ -84,7 +84,7 @@ namespace Business
                 {
                     throw new ExternalServiceException("Base de datos", "Error al actualizar el PaymentUser");
                 }
-                return userDto;
+                return MapToDTO(user);
             }
             catch (Exception ex)
             {
@@ -136,7 +136,8 @@ namespace Business
             }
         }
 
-        public PaymentUserDto MapToDto(PaymentUser user)
+        // Método para mapear de PaymentUser a PaymentUserDto
+        public PaymentUserDto MapToDTO(PaymentUser user)
         {
             return new PaymentUserDto
             {
@@ -146,6 +147,7 @@ namespace Business
             };
         }
 
+        // Método para mapear de PaymentUserDto a PaymentUser
         public PaymentUser MapToEntity(PaymentUserDto userDto)
         {
             return new PaymentUser
@@ -155,6 +157,23 @@ namespace Business
                 PersonId = userDto.PersonId
             };
         }
+
+        // Método para mapear una lista de PaymentUser a una lista de PaymentUserDto
+        private IEnumerable<PaymentUserDto> MapToDTOList(IEnumerable<PaymentUser> users)
+        {
+            var usersDto = new List<PaymentUserDto>();
+            foreach (var user in users)
+            {
+                usersDto.Add(MapToDTO(user));
+            }
+            return usersDto;
+        }
     }
 }
+
+
+
+
+
+
 

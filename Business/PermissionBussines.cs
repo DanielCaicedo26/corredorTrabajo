@@ -22,7 +22,7 @@ namespace Business
             try
             {
                 var permissions = await _permissionData.GetAllAsync();
-                return permissions.Select(MapToDto).ToList();
+                return MapToDTOList(permissions);
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@ namespace Business
                     throw new EntityNotFoundException("Permission", id);
                 }
 
-                return MapToDto(permission);
+                return MapToDTO(permission);
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace Business
                 var permission = MapToEntity(permissionDto);
                 var createdPermission = await _permissionData.CreateAsync(permission);
 
-                return MapToDto(createdPermission);
+                return MapToDTO(createdPermission);
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace Business
                     throw new ExternalServiceException("Base de datos", "Error al actualizar el permiso");
                 }
 
-                return permissionDto;
+                return MapToDTO(permission);
             }
             catch (Exception ex)
             {
@@ -135,18 +135,38 @@ namespace Business
             }
         }
 
-        private static PermissionDto MapToDto(Permission permission) => new PermissionDto
+        // Método para mapear de Permission a PermissionDto
+        private static PermissionDto MapToDTO(Permission permission)
         {
-            Id = permission.Id,
-            Name = permission.Name,
-            Description = permission.Description
-        };
+            return new PermissionDto
+            {
+                Id = permission.Id,
+                Name = permission.Name,
+                Description = permission.Description
+            };
+        }
 
-        private static Permission MapToEntity(PermissionDto permissionDto) => new Permission
+        // Método para mapear de PermissionDto a Permission
+        private static Permission MapToEntity(PermissionDto permissionDto)
         {
-            Id = permissionDto.Id,
-            Name = permissionDto.Name,
-            Description = permissionDto.Description
-        };
+            return new Permission
+            {
+                Id = permissionDto.Id,
+                Name = permissionDto.Name,
+                Description = permissionDto.Description
+            };
+        }
+
+        // Método para mapear una lista de Permission a una lista de PermissionDto
+        private IEnumerable<PermissionDto> MapToDTOList(IEnumerable<Permission> permissions)
+        {
+            var permissionsDto = new List<PermissionDto>();
+            foreach (var permission in permissions)
+            {
+                permissionsDto.Add(MapToDTO(permission));
+            }
+            return permissionsDto;
+        }
     }
 }
+

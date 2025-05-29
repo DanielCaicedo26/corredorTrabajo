@@ -29,14 +29,7 @@ namespace Business
             try
             {
                 var forms = await _formData.GetAllAsync();
-                return forms.Select(form => new FormDto
-                {
-                    Id = form.Id,
-                    Name = form.Name,
-                    Description = form.Description,
-                    DateCreation = form.DateCreation,
-                    Status = form.Status
-                }).ToList();
+                return MapToDTOList(forms);
             }
             catch (Exception ex)
             {
@@ -69,14 +62,7 @@ namespace Business
                     throw new EntityNotFoundException("Formulario", id);
                 }
 
-                return new FormDto
-                {
-                    Id = form.Id,
-                    Name = form.Name,
-                    Description = form.Description,
-                    DateCreation = form.DateCreation,
-                    Status = form.Status
-                };
+                return MapToDTO(form);
             }
             catch (Exception ex)
             {
@@ -97,23 +83,9 @@ namespace Business
 
             try
             {
-                var form = new Form
-                {
-                    Name = formDto.Name,
-                    Description = formDto.Description,
-                    DateCreation = formDto.DateCreation,
-                    Status = formDto.Status
-                };
-
+                var form = MapToEntity(formDto);
                 var createdForm = await _formData.CreateAsync(form);
-                return new FormDto
-                {
-                    Id = createdForm.Id,
-                    Name = createdForm.Name,
-                    Description = createdForm.Description,
-                    DateCreation = createdForm.DateCreation,
-                    Status = createdForm.Status
-                };
+                return MapToDTO(createdForm);
             }
             catch (Exception ex)
             {
@@ -176,5 +148,44 @@ namespace Business
                 throw new ValidationException("Name", "El nombre del formulario es obligatorio");
             }
         }
+
+        // Método para mapear de Form a FormDto
+        private FormDto MapToDTO(Form form)
+        {
+            return new FormDto
+            {
+                Id = form.Id,
+                Name = form.Name,
+                Description = form.Description,
+                DateCreation = form.DateCreation,
+                Status = form.Status
+            };
+        }
+
+        // Método para mapear de FormDto a Form
+        private Form MapToEntity(FormDto formDto)
+        {
+            return new Form
+            {
+                Id = formDto.Id,
+                Name = formDto.Name,
+                Description = formDto.Description,
+                DateCreation = formDto.DateCreation,
+                Status = formDto.Status
+            };
+        }
+
+        // Método para mapear una lista de Form a una lista de FormDto
+        private IEnumerable<FormDto> MapToDTOList(IEnumerable<Form> forms)
+        {
+            var formsDto = new List<FormDto>();
+            foreach (var form in forms)
+            {
+                formsDto.Add(MapToDTO(form));
+            }
+            return formsDto;
+        }
     }
 }
+
+

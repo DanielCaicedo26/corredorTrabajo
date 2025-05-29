@@ -104,17 +104,16 @@
             <End Role="TypeInfraction" EntitySet="TypeInfractionSet1" />
             <End Role="UserInfraction" EntitySet="UserInfractionSet" />
           </AssociationSet>
+          <EntitySet Name="InfractionSet" EntityType="Model1.Infraction" />
         </EntityContainer>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="user" Type="String" Nullable="false" />
           <Property Name="password" Type="String" Nullable="false" />
           <Property Name="gmail" Type="String" Nullable="false" />
           <Property Name="registrationdate" Type="String" Nullable="false" />
-          <Property Name="usernotificationid" Type="String" Nullable="false" />
           <NavigationProperty Name="AccessLog" Relationship="Model1.UserAccessLog" FromRole="User" ToRole="AccessLog" />
           <NavigationProperty Name="RolUser" Relationship="Model1.RolUserUser" FromRole="User" ToRole="RolUser" />
           <NavigationProperty Name="UserNotification" Relationship="Model1.UserUserNotification" FromRole="User" ToRole="UserNotification" />
@@ -128,7 +127,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="rolid" Type="String" Nullable="false" />
           <Property Name="userid" Type="String" Nullable="false" />
-          <Property Name="UserId1" Type="Int32" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Model1.RolUserUser" FromRole="RolUser" ToRole="User" />
           <NavigationProperty Name="Rol" Relationship="Model1.RolUserRol" FromRole="RolUser" ToRole="Rol" />
         </EntityType>
@@ -395,6 +393,13 @@
           <End Type="Model1.TypeInfraction" Role="TypeInfraction" Multiplicity="1" />
           <End Type="Model1.UserInfraction" Role="UserInfraction" Multiplicity="*" />
         </Association>
+        <EntityType Name="Infraction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="String" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

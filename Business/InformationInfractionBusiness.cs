@@ -29,14 +29,7 @@ namespace Business
             try
             {
                 var infractions = await _infractionData.GetAllAsync();
-                return infractions.Select(infraction => new InformationInfractionDto
-                {
-                    Id = infraction.Id,
-                    NumberSMLDV = infraction.NumberSMLDV,
-                    MinimumWage = infraction.MinimumWage,
-                    ValueSMLDV = infraction.ValueSMLDV,
-                    TotalValue = infraction.TotalValue
-                }).ToList();
+                return MapToDTOList(infractions);
             }
             catch (Exception ex)
             {
@@ -67,14 +60,7 @@ namespace Business
                     throw new EntityNotFoundException("InformationInfraction", id);
                 }
 
-                return new InformationInfractionDto
-                {
-                    Id = infraction.Id,
-                    NumberSMLDV = infraction.NumberSMLDV,
-                    MinimumWage = infraction.MinimumWage,
-                    ValueSMLDV = infraction.ValueSMLDV,
-                    TotalValue = infraction.TotalValue
-                };
+                return MapToDTO(infraction);
             }
             catch (Exception ex)
             {
@@ -94,21 +80,9 @@ namespace Business
 
             try
             {
-                var infraction = new InformationInfraction
-                {
-                    NumberSMLDV = infractionDto.NumberSMLDV,
-                    MinimumWage = infractionDto.MinimumWage
-                };
-
+                var infraction = MapToEntity(infractionDto);
                 var createdInfraction = await _infractionData.CreateAsync(infraction);
-                return new InformationInfractionDto
-                {
-                    Id = createdInfraction.Id,
-                    NumberSMLDV = createdInfraction.NumberSMLDV,
-                    MinimumWage = createdInfraction.MinimumWage,
-                    ValueSMLDV = createdInfraction.ValueSMLDV,
-                    TotalValue = createdInfraction.TotalValue
-                };
+                return MapToDTO(createdInfraction);
             }
             catch (Exception ex)
             {
@@ -168,5 +142,45 @@ namespace Business
                 throw new ValidationException("NumberSMLDV", "El número de SMLDV debe ser mayor que cero");
             }
         }
+
+        // Método para mapear de InformationInfraction a InformationInfractionDto
+        private InformationInfractionDto MapToDTO(InformationInfraction infraction)
+        {
+            return new InformationInfractionDto
+            {
+                Id = infraction.Id,
+                NumberSMLDV = infraction.NumberSMLDV,
+                MinimumWage = infraction.MinimumWage,
+                ValueSMLDV = infraction.ValueSMLDV,
+                TotalValue = infraction.TotalValue
+            };
+        }
+
+        // Método para mapear de InformationInfractionDto a InformationInfraction
+        private InformationInfraction MapToEntity(InformationInfractionDto infractionDto)
+        {
+            return new InformationInfraction
+            {
+                Id = infractionDto.Id,
+                NumberSMLDV = infractionDto.NumberSMLDV,
+                MinimumWage = infractionDto.MinimumWage,
+                ValueSMLDV = infractionDto.ValueSMLDV,
+                TotalValue = infractionDto.TotalValue
+            };
+        }
+
+        // Método para mapear una lista de InformationInfraction a una lista de InformationInfractionDto
+        private IEnumerable<InformationInfractionDto> MapToDTOList(IEnumerable<InformationInfraction> infractions)
+        {
+            var infractionsDto = new List<InformationInfractionDto>();
+            foreach (var infraction in infractions)
+            {
+                infractionsDto.Add(MapToDTO(infraction));
+            }
+            return infractionsDto;
+        }
     }
 }
+
+
+

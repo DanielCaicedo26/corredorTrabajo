@@ -22,13 +22,7 @@ namespace Business
             try
             {
                 var modules = await _moduleData.GetAllAsync();
-                return modules.Select(module => new ModuleDto
-                {
-                    Id = module.Id,
-                    Name = module.Name,
-                    Description = module.Description,
-                    Status = module.Status
-                }).ToList();
+                return MapToDTOList(modules);
             }
             catch (Exception ex)
             {
@@ -54,13 +48,7 @@ namespace Business
                     throw new EntityNotFoundException("Module", id);
                 }
 
-                return new ModuleDto
-                {
-                    Id = module.Id,
-                    Name = module.Name,
-                    Description = module.Description,
-                    Status = module.Status
-                };
+                return MapToDTO(module);
             }
             catch (Exception ex)
             {
@@ -75,22 +63,10 @@ namespace Business
             {
                 ValidateModule(moduleDto);
 
-                var module = new Module
-                {
-                    Name = moduleDto.Name,
-                    Description = moduleDto.Description,
-                    Status = moduleDto.Status
-                };
-
+                var module = MapToEntity(moduleDto);
                 var createdModule = await _moduleData.CreateAsync(module);
 
-                return new ModuleDto
-                {
-                    Id = createdModule.Id,
-                    Name = createdModule.Name,
-                    Description = createdModule.Description,
-                    Status = createdModule.Status
-                };
+                return MapToDTO(createdModule);
             }
             catch (Exception ex)
             {
@@ -116,13 +92,7 @@ namespace Business
 
             await _moduleData.UpdateAsync(existingModule);
 
-            return new ModuleDto
-            {
-                Id = existingModule.Id,
-                Name = existingModule.Name,
-                Description = existingModule.Description,
-                Status = existingModule.Status
-            };
+            return MapToDTO(existingModule);
         }
 
         public async Task DeleteModuleAsync(int id)
@@ -170,5 +140,43 @@ namespace Business
                 throw new ValidationException("Status", "El estado es obligatorio");
             }
         }
+
+        // Método para mapear de Module a ModuleDto
+        private ModuleDto MapToDTO(Module module)
+        {
+            return new ModuleDto
+            {
+                Id = module.Id,
+                Name = module.Name,
+                Description = module.Description,
+                Status = module.Status
+            };
+        }
+
+        // Método para mapear de ModuleDto a Module
+        private Module MapToEntity(ModuleDto moduleDto)
+        {
+            return new Module
+            {
+                Id = moduleDto.Id,
+                Name = moduleDto.Name,
+                Description = moduleDto.Description,
+                Status = moduleDto.Status
+            };
+        }
+
+        // Método para mapear una lista de Module a una lista de ModuleDto
+        private IEnumerable<ModuleDto> MapToDTOList(IEnumerable<Module> modules)
+        {
+            var modulesDto = new List<ModuleDto>();
+            foreach (var module in modules)
+            {
+                modulesDto.Add(MapToDTO(module));
+            }
+            return modulesDto;
+        }
     }
 }
+
+
+

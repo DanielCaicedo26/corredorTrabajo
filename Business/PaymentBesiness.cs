@@ -22,7 +22,7 @@ namespace Business
             try
             {
                 var payments = await _paymentData.GetAllAsync();
-                return payments.Select(MapToDto).ToList();
+                return MapToDTOList(payments);
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@ namespace Business
                     throw new EntityNotFoundException("Payment", id);
                 }
 
-                return MapToDto(payment);
+                return MapToDTO(payment);
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace Business
                 var payment = MapToEntity(paymentDto);
                 var createdPayment = await _paymentData.CreateAsync(payment);
 
-                return MapToDto(createdPayment);
+                return MapToDTO(createdPayment);
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace Business
                     throw new ExternalServiceException("Base de datos", "Error al actualizar el pago");
                 }
 
-                return paymentDto;
+                return MapToDTO(payment);
             }
             catch (Exception ex)
             {
@@ -141,18 +141,42 @@ namespace Business
             }
         }
 
-        public static PaymentDto MapToDto(Payment payment) => new PaymentDto
+        // Método para mapear de Payment a PaymentDto
+        private static PaymentDto MapToDTO(Payment payment)
         {
-            Id = payment.Id,
-            TypePayment = payment.TypePayment,
-            UserViolationId = payment.UserViolationId
-        };
+            return new PaymentDto
+            {
+                Id = payment.Id,
+                TypePayment = payment.TypePayment,
+                UserViolationId = payment.UserViolationId
+            };
+        }
 
-        public static Payment MapToEntity(PaymentDto paymentDto) => new Payment
+        // Método para mapear de PaymentDto a Payment
+        private static Payment MapToEntity(PaymentDto paymentDto)
         {
-            Id = paymentDto.Id,
-            TypePayment = paymentDto.TypePayment,
-            UserViolationId = paymentDto.UserViolationId
-        };
+            return new Payment
+            {
+                Id = paymentDto.Id,
+                TypePayment = paymentDto.TypePayment,
+                UserViolationId = paymentDto.UserViolationId
+            };
+        }
+
+        // Método para mapear una lista de Payment a una lista de PaymentDto
+        private IEnumerable<PaymentDto> MapToDTOList(IEnumerable<Payment> payments)
+        {
+            var paymentsDto = new List<PaymentDto>();
+            foreach (var payment in payments)
+            {
+                paymentsDto.Add(MapToDTO(payment));
+            }
+            return paymentsDto;
+        }
     }
 }
+
+
+
+
+

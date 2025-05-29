@@ -22,7 +22,7 @@ namespace Business
             try
             {
                 var agreements = await _paymentAgreementData.GetAllAsync();
-                return agreements.Select(MapToDto).ToList();
+                return MapToDTOList(agreements);
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@ namespace Business
                     throw new EntityNotFoundException("PaymentAgreement", id);
                 }
 
-                return MapToDto(agreement);
+                return MapToDTO(agreement);
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace Business
                 var agreement = MapToEntity(agreementDto);
                 var createdAgreement = await _paymentAgreementData.CreateAsync(agreement);
 
-                return MapToDto(createdAgreement);
+                return MapToDTO(createdAgreement);
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace Business
                     throw new ExternalServiceException("Base de datos", "Error al actualizar el acuerdo de pago");
                 }
 
-                return agreementDto;
+                return MapToDTO(agreement);
             }
             catch (Exception ex)
             {
@@ -153,22 +153,46 @@ namespace Business
             }
         }
 
-        private static PaymentAgreementDto MapToDto(PaymentAgreement agreement) => new PaymentAgreementDto
+        // Método para mapear de PaymentAgreement a PaymentAgreementDto
+        private static PaymentAgreementDto MapToDTO(PaymentAgreement agreement)
         {
-            Id = agreement.Id,
-            Address = agreement.Address,
-            Neighborhood = agreement.Neighborhood,
-            FinanceAmount = agreement.Financeamount,
-            AgreementDescription = agreement.AgreementaDescription
-        };
+            return new PaymentAgreementDto
+            {
+                Id = agreement.Id,
+                Address = agreement.Address,
+                Neighborhood = agreement.Neighborhood,
+                FinanceAmount = agreement.Financeamount,
+                AgreementDescription = agreement.AgreementaDescription
+            };
+        }
 
-        private static PaymentAgreement MapToEntity(PaymentAgreementDto agreementDto) => new PaymentAgreement
+        // Método para mapear de PaymentAgreementDto a PaymentAgreement
+        private static PaymentAgreement MapToEntity(PaymentAgreementDto agreementDto)
         {
-            Id = agreementDto.Id,
-            Address = agreementDto.Address,
-            Neighborhood = agreementDto.Neighborhood,
-            Financeamount = agreementDto.FinanceAmount,
-            AgreementaDescription = agreementDto.AgreementDescription
-        };
+            return new PaymentAgreement
+            {
+                Id = agreementDto.Id,
+                Address = agreementDto.Address,
+                Neighborhood = agreementDto.Neighborhood,
+                Financeamount = agreementDto.FinanceAmount,
+                AgreementaDescription = agreementDto.AgreementDescription
+            };
+        }
+
+        // Método para mapear una lista de PaymentAgreement a una lista de PaymentAgreementDto
+        private IEnumerable<PaymentAgreementDto> MapToDTOList(IEnumerable<PaymentAgreement> agreements)
+        {
+            var agreementsDto = new List<PaymentAgreementDto>();
+            foreach (var agreement in agreements)
+            {
+                agreementsDto.Add(MapToDTO(agreement));
+            }
+            return agreementsDto;
+        }
     }
 }
+
+
+
+
+

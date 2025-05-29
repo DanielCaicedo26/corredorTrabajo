@@ -22,7 +22,7 @@ namespace Business
             try
             {
                 var moduleForms = await _moduleFormData.GetAllAsync();
-                return moduleForms.Select(MapToDto).ToList();
+                return MapToDTOList(moduleForms);
             }
             catch (Exception ex)
             {
@@ -48,7 +48,7 @@ namespace Business
                     throw new EntityNotFoundException("ModuleForm", id);
                 }
 
-                return MapToDto(moduleForm);
+                return MapToDTO(moduleForm);
             }
             catch (Exception ex)
             {
@@ -64,7 +64,7 @@ namespace Business
                 ValidateModuleForm(moduleFormDto);
                 var moduleForm = MapToEntity(moduleFormDto);
                 var createdModuleForm = await _moduleFormData.CreateAsync(moduleForm);
-                return MapToDto(createdModuleForm);
+                return MapToDTO(createdModuleForm);
             }
             catch (Exception ex)
             {
@@ -84,7 +84,7 @@ namespace Business
                 {
                     throw new ExternalServiceException("Base de datos", "Error al actualizar el módulo de formulario");
                 }
-                return moduleFormDto;
+                return MapToDTO(moduleForm);
             }
             catch (Exception ex)
             {
@@ -134,18 +134,41 @@ namespace Business
             }
         }
 
-        public static ModuleFormDto MapToDto(ModuleForm moduleForm) => new ModuleFormDto
+        // Método para mapear de ModuleForm a ModuleFormDto
+        public static ModuleFormDto MapToDTO(ModuleForm moduleForm)
         {
-            Id = moduleForm.Id,
-            FormId = moduleForm.FormId,
-            ModuleId = moduleForm.ModuleId
-        };
+            return new ModuleFormDto
+            {
+                Id = moduleForm.Id,
+                FormId = moduleForm.FormId,
+                ModuleId = moduleForm.ModuleId
+            };
+        }
 
-        public static ModuleForm MapToEntity(ModuleFormDto moduleFormDto) => new ModuleForm
+        // Método para mapear de ModuleFormDto a ModuleForm
+        public static ModuleForm MapToEntity(ModuleFormDto moduleFormDto)
         {
-            Id = moduleFormDto.Id,
-            FormId = moduleFormDto.FormId,
-            ModuleId = moduleFormDto.ModuleId
-        };
+            return new ModuleForm
+            {
+                Id = moduleFormDto.Id,
+                FormId = moduleFormDto.FormId,
+                ModuleId = moduleFormDto.ModuleId
+            };
+        }
+
+        // Método para mapear una lista de ModuleForm a una lista de ModuleFormDto
+        private IEnumerable<ModuleFormDto> MapToDTOList(IEnumerable<ModuleForm> moduleForms)
+        {
+            var moduleFormsDto = new List<ModuleFormDto>();
+            foreach (var moduleForm in moduleForms)
+            {
+                moduleFormsDto.Add(MapToDTO(moduleForm));
+            }
+            return moduleFormsDto;
+        }
     }
 }
+
+
+
+
